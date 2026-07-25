@@ -11,7 +11,7 @@ function Contact() {
       id="contacto"
       className="
         relative
-        py-24
+        py-30
         lg:py-36
         text-black
         overflow-hidden

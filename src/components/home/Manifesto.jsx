@@ -2,7 +2,7 @@ import manifestImage from "../../assets/images/nosotros/manifesto-tech.png";
 
 function Manifesto() {
   return (
-    <section id="nosotros" className="relative py-24 lg:py-36 overflow-hidden">
+    <section id="nosotros" className="relative py-30 lg:py-36 overflow-hidden">
       {/* Fondo con brillo ambiental sutil */}
       <div 
         aria-hidden="true" 

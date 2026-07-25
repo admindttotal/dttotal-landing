@@ -33,7 +33,7 @@ function Products() {
   return (
     <section
       id="software"
-      className="relative py-24 lg:py-36 overflow-hidden text-black"
+      className="relative py-30 lg:py-36 overflow-hidden text-black"
     >
       <div
         className="

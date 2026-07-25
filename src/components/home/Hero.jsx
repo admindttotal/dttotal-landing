@@ -127,7 +127,7 @@ function Hero() {
   const activeDotIndex = currentSlide % slidesData.length;
 
   return (
-    <section className="relative overflow-hidden pt-20 sm:pt-24 pb-6 sm:pb-8">
+    <section className="relative overflow-hidden pt-10 sm:pt-24 pb-6 sm:pb-8">
       <div
         className="
           relative
