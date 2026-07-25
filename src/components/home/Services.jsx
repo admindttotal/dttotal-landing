@@ -70,7 +70,7 @@ function Services() {
             tracking-tight
           "
         >
-          Una sola marca.
+          Una sola marca-.
           <br />
           <span className="text-neutral-500">Múltiples soluciones.</span>
         </h2>
