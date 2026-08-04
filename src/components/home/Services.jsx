@@ -2,23 +2,18 @@ function Services() {
   const services = [
     {
       number: "01",
-      title: "Equipamiento Tecnológico",
-      text: "Computadoras, componentes, accesorios, redes, impresión y todo el equipo que necesitas para estudiar, trabajar o hacer crecer tu negocio.",
+      title: "Herramientas a Medida",
+      text: "Cotizadores, control de inventario básico y automatizaciones simples para tareas que hoy haces a mano. Sin sistemas gigantes, sin curva de aprendizaje.",
     },
     {
       number: "02",
-      title: "Soporte Técnico",
-      text: "Instalación, mantenimiento, diagnóstico y acompañamiento para que tu tecnología siga funcionando cuando más la necesitas.",
+      title: "Presencia Web",
+      text: "Dominio, correo corporativo y una landing page simple y profesional para que tu negocio exista en internet, sin complicaciones ni procesos eternos.",
     },
     {
       number: "03",
-      title: "Desarrollo Web",
-      text: "Creamos páginas web, landing pages y sitios profesionales para que tu negocio tenga una presencia moderna y genere confianza desde el primer contacto.",
-    },
-    {
-      number: "04",
-      title: "Herramientas Digitales",
-      text: "Creamos aplicaciones y herramientas que simplifican tareas diarias, ayudan a organizar información y ahorran tiempo en el trabajo.",
+      title: "Equipo y Soporte",
+      text: "Si además necesitas equipo o una mano con tu tecnología del día a día, también te ayudamos. Con la misma honestidad que ofrecemos todo lo demás.",
     },
   ];
 
@@ -70,9 +65,9 @@ function Services() {
             tracking-tight
           "
         >
-          Una sola marca.
+          Un problema simple.
           <br />
-          <span className="text-neutral-500">Múltiples soluciones.</span>
+          <span className="text-neutral-500">Una solución simple.</span>
         </h2>
 
         <div className="mt-16 lg:mt-24 border-t border-white/15">

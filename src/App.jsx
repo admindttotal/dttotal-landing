@@ -107,8 +107,8 @@ function Home() {
     <>
       <Hero />
       <Manifesto />
-      <Services />
       <Products />
+      <Services />
       <Contact />
     </>
   );

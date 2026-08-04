@@ -149,8 +149,8 @@ function Navbar() {
             >
               {[
                 { name: "Nosotros", id: "nosotros" },
-                { name: "Servicios", id: "servicios" },
                 { name: "Software", id: "software" },
+                { name: "Servicios", id: "servicios" },
                 { name: "Contacto", id: "contacto" },
               ].map((item) => (
                 <a

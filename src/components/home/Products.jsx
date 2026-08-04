@@ -8,6 +8,8 @@ const software = [
       "Genera cotizaciones claras y profesionales en minutos. Ideal para responder rápido a tus clientes sin perder tiempo en hojas de cálculo.",
     icon: FileSpreadsheet,
     badge: "Desarrollo Propio",
+    ctaText: "Conocer CotizaMex",
+    ctaLink: "https://cotizamex.dttotal.com",
     cardStyle: "bg-white/10 hover:bg-blue-950/[0.08] hover:border-blue-500/30 hover:backdrop-blur-md",
     titleHoverColor: "group-hover:text-blue-600",
     glowColor: "group-hover:bg-blue-500/15",
@@ -20,7 +22,10 @@ const software = [
     description:
       "Una herramienta práctica para quienes solo necesitan saber qué entra, qué sale y cuánto tienen disponible.",
     icon: Boxes,
-    badge: "Desarrollo Propio",
+    badge: "Desarrollo en proceso",
+    status: "Proximamente Disponible",
+    ctaText: "Avísenme cuando esté lista",
+    ctaLink: "#contacto",
     cardStyle: "bg-white/10 hover:bg-emerald-950/[0.08] hover:border-emerald-500/30 hover:backdrop-blur-md",
     titleHoverColor: "group-hover:text-emerald-600",
     glowColor: "group-hover:bg-emerald-500/15",
@@ -35,56 +40,39 @@ function Products() {
       id="software"
       className="relative py-30 lg:py-36 overflow-hidden text-black"
     >
-      <div
-        className="
-          relative
-          z-10
-          max-w-[1600px]
-          mx-auto
-          px-6
-          sm:px-8
-          lg:px-14
-        "
-      >
-        {/* HEADER DE LA SECCIÓN */}
-        <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-8 pb-12 border-b border-black/10">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#e3cd5c] shadow-[0_0_10px_#e3cd5c]" />
-              <p
-                className="
-                  uppercase
-                  tracking-[0.35em]
-                  text-xs
-                  sm:text-sm
-                  text-neutral-500
-                  font-semibold
-                "
-              >
-                Herramientas Digitales
-              </p>
-            </div>
-
-            <h2
-              className="
-                text-4xl
-                sm:text-6xl
-                md:text-7xl
-                lg:text-8xl
-                font-black
-                uppercase
-                leading-[0.92]
-                tracking-tight
-              "
-            >
-              Desarrollamos
-              <br />
-              <span className="text-neutral-400">lo que usamos.</span>
-            </h2>
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-14">
+        {/* HEADER DE LA SECCIÓN — apilado, no lado a lado */}
+        <div className="pb-12 border-b border-black/10">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#e3cd5c] shadow-[0_0_10px_#e3cd5c]" />
+            <p className="uppercase tracking-[0.35em] text-xs sm:text-sm text-neutral-500 font-semibold">
+              Nuestro Enfoque
+            </p>
           </div>
 
-          <p className="max-w-xl text-base sm:text-lg text-neutral-600 leading-relaxed">
-            No desarrollamos software por moda. Creamos herramientas porque primero fueron una necesidad real. Hoy forman parte de DT Total y ayudan a simplificar tareas que antes consumían tiempo.
+          <h2
+            className="
+              max-w-4xl
+              text-4xl
+              sm:text-6xl
+              md:text-7xl
+              font-black
+              uppercase
+              leading-[0.95]
+              tracking-tight
+            "
+          >
+            Soluciones simples,
+            <br />
+            <span className="text-neutral-400">para quienes quieren</span>
+            <br />
+            avanzar rápido.
+          </h2>
+
+          <p className="mt-8 max-w-2xl text-base sm:text-lg text-neutral-600 leading-relaxed">
+            No necesitas un ERP de 6 meses para saber cuánto cobrarle a un
+            cliente o cuánto inventario te queda. Necesitas algo simple,
+            hecho para tu negocio, que puedas usar desde el primer día.
           </p>
         </div>
 
@@ -115,33 +103,30 @@ function Products() {
                   ${item.cardStyle}
                 `}
               >
-                {/* Resplandor semitransparente sutil en la esquina */}
-                <div 
+                <div
                   className={`
-                    absolute 
-                    top-0 
-                    right-0 
-                    w-48 
-                    h-48 
+                    absolute
+                    top-0
+                    right-0
+                    w-48
+                    h-48
                     bg-transparent
-                    blur-3xl 
-                    rounded-full 
-                    transition-all 
-                    duration-500 
+                    blur-3xl
+                    rounded-full
+                    transition-all
+                    duration-500
                     pointer-events-none
                     ${item.glowColor}
                   `}
                 />
 
                 <div>
-                  {/* FILA SUPERIOR: ÍCONO + BADGE CON INDICADOR + ÍNDICE */}
                   <div className="flex items-center justify-between gap-4 mb-8">
                     <div className="flex items-center gap-3">
                       <div className="p-3 bg-neutral-100/60 backdrop-blur-sm rounded-2xl text-black group-hover:bg-black group-hover:text-white transition-colors duration-300">
                         <IconComponent size={24} />
                       </div>
-                      
-                      {/* Badge con punto pulsante resuelto de forma estática limpia */}
+
                       <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100/60 backdrop-blur-sm border border-black/5">
                         <span className="relative flex h-2.5 w-2.5">
                           <span className={`absolute inline-flex h-full w-full rounded-full opacity-0 group-hover:opacity-75 group-hover:animate-ping transition-opacity duration-300 ${item.indicatorPing}`} />
@@ -158,7 +143,6 @@ function Products() {
                     </span>
                   </div>
 
-                  {/* ETIQUETA Y TÍTULO LIMPIO */}
                   <span className="text-xs uppercase tracking-widest font-semibold text-neutral-500 block mb-2">
                     {item.tag}
                   </span>
@@ -172,7 +156,7 @@ function Products() {
                       uppercase
                       tracking-tight
                       text-neutral-950
-                      mb-4
+                      mb-3
                       transition-colors
                       duration-300
                       ${item.titleHoverColor}
@@ -181,15 +165,20 @@ function Products() {
                     {item.name}
                   </h3>
 
+                  <p className="text-xs sm:text-sm font-medium text-neutral-500 mb-5">
+                    {item.status}
+                  </p>
+
                   <p className="text-neutral-600 text-base lg:text-lg leading-relaxed mb-8">
                     {item.description}
                   </p>
                 </div>
 
-                {/* BOTÓN DE ACCIÓN */}
                 <div className="pt-6 border-t border-black/5">
                   <a
-                    href="#contacto"
+                    href={item.ctaLink}
+                    target={item.ctaLink.startsWith("http") ? "_blank" : undefined}
+                    rel={item.ctaLink.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="
                       inline-flex
                       items-center
@@ -212,7 +201,7 @@ function Products() {
                       group-hover:text-white
                     "
                   >
-                    <span>Solicitar Demostración</span>
+                    <span>{item.ctaText}</span>
                     <ArrowUpRight
                       size={16}
                       className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

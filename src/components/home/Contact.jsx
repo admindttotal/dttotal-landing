@@ -3,7 +3,7 @@ import { ArrowUpRight, Mail, MessageSquare, MapPin, Clock } from "lucide-react";
 function Contact() {
   const whatsappNumber = "524734594981";
   const whatsappMessage = encodeURIComponent(
-    "Hola, quisiera platicar sobre un proyecto."
+    "Hola, quiero contarte un proceso que me gustaría automatizar."
   );
 
   return (

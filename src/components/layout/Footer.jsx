@@ -1,6 +1,23 @@
 import { ArrowUp } from "lucide-react";
 import logo from "../../assets/images/logo.png";
 
+// TikTok no existe en lucide-react, así que usamos un ícono SVG simple:
+function TikTokIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.76 5.7 5.69 5.7c3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/>
+    </svg>
+  );
+}
+
+function FacebookIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  );
+}
+
 function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -115,6 +132,50 @@ function Footer() {
             >
               Tecnología, soporte, desarrollo web y herramientas digitales para personas, negocios y empresas.
             </p>
+
+            {/* REDES SOCIALES */}
+            <div className="mt-6 flex items-center gap-4">
+              <a
+                href="https://www.facebook.com/TU_PAGINA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  p-2.5
+                  rounded-full
+                  border
+                  border-white/10
+                  text-neutral-400
+                  hover:text-white
+                  hover:border-white/30
+                  hover:bg-neutral-900
+                  transition-all
+                  duration-200
+                "
+                aria-label="Facebook"
+              >
+                <FacebookIcon width={16} height={16} />
+              </a>
+              <a
+                href="https://www.tiktok.com/@TU_USUARIO"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  p-2.5
+                  rounded-full
+                  border
+                  border-white/10
+                  text-neutral-400
+                  hover:text-white
+                  hover:border-white/30
+                  hover:bg-neutral-900
+                  transition-all
+                  duration-200
+                "
+                aria-label="TikTok"
+              >
+                <TikTokIcon width={16} height={16} />
+              </a>
+            </div>
           </div>
 
           {/* LINKS */}
@@ -155,10 +216,10 @@ function Footer() {
                 "
               >
                 <a
-                  href="#servicios"
+                  href="#nosotros"
                   className="hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
                 >
-                  Servicios
+                  Nosotros
                 </a>
                 <a
                   href="#software"
@@ -167,10 +228,10 @@ function Footer() {
                   Software
                 </a>
                 <a
-                  href="#nosotros"
+                  href="#servicios"
                   className="hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
                 >
-                  Nosotros
+                  Servicios
                 </a>
                 <a
                   href="#contacto"
@@ -204,10 +265,9 @@ function Footer() {
                   text-neutral-400
                 "
               >
-                <span>Equipamiento Tecnológico</span>
-                <span>Soporte Técnico</span>
-                <span>Desarrollo Web</span>
-                <span>Herramientas Digitales</span>
+                <span>Herramientas a Medida</span>
+                <span>Presencia Web</span>
+                <span>Equipo y Soporte</span>
               </div>
             </div>
           </div>
