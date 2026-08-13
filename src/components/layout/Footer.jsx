@@ -2,7 +2,6 @@ import { ArrowUp } from "lucide-react";
 import logo from "../../assets/images/logo.png";
 
 // TikTok no existe en lucide-react, así que usamos un ícono SVG simple.
-// Se queda comentado el link más abajo hasta que exista la cuenta; el ícono se conserva listo para reactivar.
 // eslint-disable-next-line no-unused-vars
 function TikTokIcon(props) {
   return (
@@ -21,6 +20,7 @@ function FacebookIcon(props) {
 }
 
 function Footer() {
+  // Función universal para subir al inicio de la página
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -72,7 +72,12 @@ function Footer() {
         >
           {/* BRAND */}
           <div className="max-w-md">
-            <div className="flex items-center gap-4">
+            {/* Contenedor del Logo y Nombre, ambos hacen ScrollToTop */}
+            <div 
+              onClick={scrollToTop}
+              title="Ir al inicio"
+              className="flex items-center gap-4 group cursor-pointer inline-flex"
+            >
               {/* LOGO */}
               <div
                 className="
@@ -83,6 +88,15 @@ function Footer() {
                   justify-center
                   overflow-hidden
                   shrink-0
+                  rounded-xl
+                  bg-white/5
+                  border
+                  border-white/10
+                  transition-all
+                  duration-300
+                  group-hover:border-[#e3cd5c]/50
+                  group-hover:scale-105
+                  group-hover:shadow-[0_0_20px_rgba(227,205,92,0.2)]
                 "
               >
                 <img
@@ -94,6 +108,9 @@ function Footer() {
                     w-full
                     h-full
                     object-contain
+                    transition-transform
+                    duration-300
+                    group-hover:scale-110
                   "
                 />
               </div>
@@ -104,6 +121,9 @@ function Footer() {
                     text-2xl
                     font-black
                     tracking-[0.25em]
+                    transition-colors
+                    duration-300
+                    group-hover:text-[#e3cd5c]
                   "
                 >
                   DT TOTAL
@@ -132,30 +152,32 @@ function Footer() {
                 leading-relaxed
               "
             >
-              Tecnología, soporte, desarrollo web y herramientas digitales para personas, negocios y empresas.
+              Tecnología, soporte y presencia digital para empresas, hogar y negocios.
             </p>
 
             {/* REDES SOCIALES */}
             <div className="mt-6 flex items-center gap-4">
               <a
-                href="https://www.facebook.com/TU_PAGINA"
+                href="https://www.facebook.com/profile.php?id=61591094207621"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="
-                  p-2.5
+                  group/social
+                  p-3
                   rounded-full
                   border
                   border-white/10
                   text-neutral-400
-                  hover:text-white
-                  hover:border-white/30
-                  hover:bg-neutral-900
+                  hover:text-black
+                  hover:border-[#e3cd5c]
+                  hover:bg-[#e3cd5c]
                   transition-all
-                  duration-200
+                  duration-300
+                  active:scale-95
                 "
                 aria-label="Facebook"
               >
-                <FacebookIcon width={16} height={16} />
+                <FacebookIcon width={18} height={18} className="transition-transform duration-300 group-hover/social:scale-110" />
               </a>
               {/* TikTok: sin cuenta activa por ahora, descomentar cuando exista
               <a
@@ -163,20 +185,22 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="
-                  p-2.5
+                  group/social
+                  p-3
                   rounded-full
                   border
                   border-white/10
                   text-neutral-400
-                  hover:text-white
-                  hover:border-white/30
-                  hover:bg-neutral-900
+                  hover:text-black
+                  hover:border-[#e3cd5c]
+                  hover:bg-[#e3cd5c]
                   transition-all
-                  duration-200
+                  duration-300
+                  active:scale-95
                 "
                 aria-label="TikTok"
               >
-                <TikTokIcon width={16} height={16} />
+                <TikTokIcon width={18} height={18} className="transition-transform duration-300 group-hover/social:scale-110" />
               </a>
               */}
             </div>
@@ -206,7 +230,7 @@ function Footer() {
                   gap-2
                 "
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#e3cd5c]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#e3cd5c] animate-pulse" />
                 Navegación
               </p>
 
@@ -221,19 +245,19 @@ function Footer() {
               >
                 <a
                   href="#nosotros"
-                  className="hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
+                  className="hover:text-[#e3cd5c] transition-all duration-300 hover:translate-x-2 transform inline-block"
                 >
                   Nosotros
                 </a>
                 <a
                   href="#servicios"
-                  className="hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
+                  className="hover:text-[#e3cd5c] transition-all duration-300 hover:translate-x-2 transform inline-block"
                 >
                   Servicios
                 </a>
                 <a
                   href="#contacto"
-                  className="hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
+                  className="hover:text-[#e3cd5c] transition-all duration-300 hover:translate-x-2 transform inline-block"
                 >
                   Contacto
                 </a>
@@ -263,9 +287,9 @@ function Footer() {
                   text-neutral-400
                 "
               >
-                <span>Equipo y Distribución</span>
-                <span>Presencia Web</span>
-                <span>Soporte y Mantenimiento</span>
+                <span className="hover:text-white transition-colors duration-200 cursor-default">Equipo y Distribución</span>
+                <span className="hover:text-white transition-colors duration-200 cursor-default">Presencia Web</span>
+                <span className="hover:text-white transition-colors duration-200 cursor-default">Soporte y Mantenimiento</span>
               </div>
             </div>
           </div>
@@ -295,10 +319,11 @@ function Footer() {
           </span>
 
           <div className="flex items-center gap-6">
-            <span className="tracking-wide hidden md:inline">
+            <span className="tracking-wide hidden md:inline text-neutral-400">
               Tecnología • Soporte • Desarrollo Web
             </span>
             
+            {/* BOTÓN "IR ARRIBA" */}
             <button
               onClick={scrollToTop}
               className="
@@ -306,25 +331,26 @@ function Footer() {
                 flex
                 items-center
                 gap-2
-                py-2
-                px-4
+                py-2.5
+                px-5
                 rounded-full
                 border
                 border-white/10
-                text-neutral-400
-                hover:text-white
-                hover:border-white/30
-                hover:bg-neutral-900
+                text-neutral-300
+                hover:text-black
+                hover:border-[#e3cd5c]
+                hover:bg-[#e3cd5c]
                 transition-all
-                duration-200
+                duration-300
                 cursor-pointer
                 active:scale-95
+                shadow-sm
               "
             >
               <span>Ir arriba</span>
               <ArrowUp 
                 size={14} 
-                className="transition-transform duration-300 group-hover:-translate-y-0.5" 
+                className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:text-black" 
                 style={{ color: "#e3cd5c" }}
               />
             </button>
