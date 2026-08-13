@@ -1,9 +1,36 @@
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+
+// Efecto "máquina de escribir": revela el texto letra por letra con fade in.
+// aria-label mantiene el texto completo accesible para lectores de pantalla.
+function TypewriterText({ text, isInView, startDelay = 0 }) {
+  return (
+    <span aria-label={text}>
+      <span aria-hidden="true">
+        {Array.from(text).map((char, i) => (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.01, delay: startDelay + i * 0.014 }}
+          >
+            {char}
+          </motion.span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
 function Services() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   const services = [
     {
       number: "01",
-      title: "Herramientas a Medida",
-      text: "Cotizadores, control de inventario básico y automatizaciones simples para tareas que hoy haces a mano. Sin sistemas gigantes, sin curva de aprendizaje.",
+      title: "Equipo y Distribución",
+      text: "Cómputo, redes, impresión, videovigilancia y puntos de venta. Te ayudamos a encontrar el equipo correcto para tu negocio, con marcas confiables y sin relleno técnico.",
     },
     {
       number: "02",
@@ -12,13 +39,14 @@ function Services() {
     },
     {
       number: "03",
-      title: "Equipo y Soporte",
-      text: "Si además necesitas equipo o una mano con tu tecnología del día a día, también te ayudamos. Con la misma honestidad que ofrecemos todo lo demás.",
+      title: "Soporte y Mantenimiento",
+      text: "Instalación, diagnóstico y acompañamiento continuo para que tu tecnología siga funcionando cuando más la necesitas.",
     },
   ];
 
   return (
     <section
+      ref={ref}
       id="servicios"
       className="
         relative
@@ -38,7 +66,13 @@ function Services() {
           lg:px-14
         "
       >
-        <div className="flex items-center gap-3 mb-4">
+        {/* Etiqueta superior animada */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="flex items-center gap-3 mb-4"
+        >
           <span className="w-2.5 h-2.5 rounded-full bg-[#e3cd5c] shadow-[0_0_10px_#e3cd5c]" />
           <p
             className="
@@ -49,11 +83,15 @@ function Services() {
               font-semibold
             "
           >
-            Lo que hacemos
+            Nuestra trayectoria
           </p>
-        </div>
+        </motion.div>
 
-        <h2
+        {/* Título principal animado */}
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="
             mt-4
             text-4xl
@@ -65,15 +103,19 @@ function Services() {
             tracking-tight
           "
         >
-          Un problema simple.
+          Confianza respaldada.
           <br />
-          <span className="text-neutral-500">Una solución simple.</span>
-        </h2>
+          <span className="text-neutral-500">Hecha números reales.</span>
+        </motion.h2>
 
+        {/* Lista con animación secuencial para cada renglón */}
         <div className="mt-16 lg:mt-24 border-t border-white/15">
-          {services.map((item) => (
-            <div
+          {services.map((item, index) => (
+            <motion.div
               key={item.number}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.3 + index * 0.15, ease: "easeOut" }}
               className="
                 group
                 grid
@@ -126,9 +168,13 @@ function Services() {
                   group-hover:text-neutral-300
                 "
               >
-                {item.text}
+                <TypewriterText
+                  text={item.text}
+                  isInView={isInView}
+                  startDelay={0.5 + index * 0.15}
+                />
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

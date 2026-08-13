@@ -11,7 +11,6 @@ function Navbar() {
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
 
-  // Función para realizar un scroll suave dado un ID
   const scrollToElement = (targetId) => {
     const element = document.getElementById(targetId);
     if (element) {
@@ -19,7 +18,6 @@ function Navbar() {
     }
   };
 
-  // Función para navegar suavemente a las secciones desde cualquier ruta
   const handleNavClick = (e, targetId) => {
     e.preventDefault();
     closeMenu();
@@ -131,7 +129,7 @@ function Navbar() {
               </div>
             </Link>
 
-            {/* MENU DESKTOP (Mostrado únicamente a partir de xl: 1280px) */}
+            {/* MENU DESKTOP (Sin Software) */}
             <nav
               className="
                 hidden
@@ -149,7 +147,6 @@ function Navbar() {
             >
               {[
                 { name: "Nosotros", id: "nosotros" },
-                { name: "Software", id: "software" },
                 { name: "Servicios", id: "servicios" },
                 { name: "Contacto", id: "contacto" },
               ].map((item) => (
@@ -271,7 +268,7 @@ function Navbar() {
               />
             </a>
 
-            {/* BOTÓN MENÚ MÓVIL (Activo hasta 1279px, incluyendo iPad Pro) */}
+            {/* BOTÓN MENÚ MÓVIL */}
             <button
               onClick={toggleMenu}
               aria-label="Toggle navigation menu"
@@ -289,7 +286,7 @@ function Navbar() {
             </button>
           </div>
 
-          {/* MENÚ MÓVIL DESPLEGABLE */}
+          {/* MENÚ MÓVIL DESPLEGABLE (Sin Software) */}
           {isOpen && (
             <div
               className="
@@ -309,7 +306,6 @@ function Navbar() {
                 {[
                   { name: "Nosotros", id: "nosotros" },
                   { name: "Servicios", id: "servicios" },
-                  { name: "Software", id: "software" },
                   { name: "Contacto", id: "contacto" },
                 ].map((item) => (
                   <a

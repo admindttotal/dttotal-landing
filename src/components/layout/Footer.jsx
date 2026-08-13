@@ -1,7 +1,9 @@
 import { ArrowUp } from "lucide-react";
 import logo from "../../assets/images/logo.png";
 
-// TikTok no existe en lucide-react, así que usamos un ícono SVG simple:
+// TikTok no existe en lucide-react, así que usamos un ícono SVG simple.
+// Se queda comentado el link más abajo hasta que exista la cuenta; el ícono se conserva listo para reactivar.
+// eslint-disable-next-line no-unused-vars
 function TikTokIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -155,6 +157,7 @@ function Footer() {
               >
                 <FacebookIcon width={16} height={16} />
               </a>
+              {/* TikTok: sin cuenta activa por ahora, descomentar cuando exista
               <a
                 href="https://www.tiktok.com/@TU_USUARIO"
                 target="_blank"
@@ -175,6 +178,7 @@ function Footer() {
               >
                 <TikTokIcon width={16} height={16} />
               </a>
+              */}
             </div>
           </div>
 
@@ -222,12 +226,6 @@ function Footer() {
                   Nosotros
                 </a>
                 <a
-                  href="#software"
-                  className="hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
-                >
-                  Software
-                </a>
-                <a
                   href="#servicios"
                   className="hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block"
                 >
@@ -265,9 +263,9 @@ function Footer() {
                   text-neutral-400
                 "
               >
-                <span>Herramientas a Medida</span>
+                <span>Equipo y Distribución</span>
                 <span>Presencia Web</span>
-                <span>Equipo y Soporte</span>
+                <span>Soporte y Mantenimiento</span>
               </div>
             </div>
           </div>

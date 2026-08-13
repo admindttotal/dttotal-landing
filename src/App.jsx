@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Ruta corregida para App.jsx (un solo nivel hacia arriba desde /src)
 import logo from "./assets/images/logo.png";
@@ -9,11 +10,13 @@ import Navbar from "./components/layout/Navbar";
 import Hero from "./components/home/Hero";
 import Manifesto from "./components/home/Manifesto";
 import Services from "./components/home/Services";
-import Products from "./components/home/Products";
+import Counter from "./components/home/Counter";
 import Contact from "./components/home/Contact";
 import Footer from "./components/layout/Footer";
 
 import Catalog from "./pages/Catalog";
+import CircuitNetworkBackground from "./components/common/CircuitNetworkBackground";
+
 
 // Helper para Scroll al cambiar de ruta
 function ScrollToTop() {
@@ -57,7 +60,10 @@ function ScrollToTopButton() {
   if (!isVisible) return null;
 
   return (
-    <button
+    <motion.button
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
       onClick={scrollToTop}
       aria-label="Volver arriba"
       className="
@@ -75,7 +81,7 @@ function ScrollToTopButton() {
         hover:bg-[#e3cd5c]
         hover:text-black
         hover:border-[#e3cd5c]
-        transition-all
+        transition-colors
         duration-300
         cursor-pointer
         flex
@@ -85,7 +91,7 @@ function ScrollToTopButton() {
       "
     >
       <ArrowUp size={18} className="transition-transform duration-300 group-hover:-translate-y-0.5" />
-    </button>
+    </motion.button>
   );
 }
 
@@ -104,38 +110,38 @@ function Home() {
   }, [location]);
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <Hero />
       <Manifesto />
-      <Products />
+      <Counter />
       <Services />
       <Contact />
-    </>
+    </motion.div>
   );
 }
 
 function App() {
+  const location = useLocation();
+
   return (
     <div className="relative bg-white min-h-screen text-neutral-900 flex flex-col overflow-x-hidden">
-      {/* GLOBAL GRID BACKGROUND (SCROLLEABLE) */}
-      <div
-        className="
-          absolute
-          inset-0
-          pointer-events-none
-          z-0
-          bg-[linear-gradient(#00000008_1px,transparent_1px),linear-gradient(90deg,#00000008_1px,transparent_1px)]
-          bg-[size:70px_70px]
-        "
-      />
+      {/* FONDO ANIMADO: Lluvia de ceros y unos sutil estilo gota */}
+      <CircuitNetworkBackground />
 
-      {/* LOGO BACKGROUND DECORATIVO GLOBAL (FIXED) */}
-      <div
+      {/* LOGO BACKGROUND DECORATIVO GLOBAL (FIXED) con efecto flotante/aparición */}
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 0.1, x: 0 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
         className="
           fixed
           -right-0 xl:-right-10
           top-28 sm:top-36 xl:top-28
-          opacity-[0.1] xl:opacity-[0.1]
           pointer-events-none
           select-none
           z-0
@@ -150,17 +156,19 @@ function App() {
             grayscale
           "
         />
-      </div>
+      </motion.div>
 
       <ScrollToTop />
 
       <Navbar />
 
       <main className="relative z-10 flex-1 pt-24">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/catalog" element={<Catalog />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalog" element={<Catalog />} />
+          </Routes>
+        </AnimatePresence>
       </main>
 
       <Footer />

@@ -1,8 +1,67 @@
-import manifestImage from "../../assets/images/nosotros/manifesto-tech.png";
+import { useState, useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+
+// Importa aquí tus imágenes reales
+import supportImg1 from "../../assets/images/nosotros/supportImg1.jpg";
+import supportImg2 from "../../assets/images/nosotros/supportImg2.png";
+import supportImg3 from "../../assets/images/nosotros/supportImg3.jpg";
+
+const realPhotos = [
+  {
+    id: 1,
+    image: supportImg1,
+    title: "Atención al cliente",
+    caption: "Resolviendo pendientes y preparando tu cotización, cuando lo necesites.",
+  },
+  {
+    id: 2,
+    image: supportImg2,
+    title: "Todo para tu PC o laptop",
+    caption: "Procesadores, tarjetas gráficas, RAM y más. Y si lo necesitas, también te la armamos.",
+  },
+  {
+    id: 3,
+    image: supportImg3,
+    title: "Mantenimiento a fondo",
+    caption: "No solo cambiamos piezas: diagnosticamos la causa real de la falla.",
+  },
+    /*{
+    id: 3,
+    image: supportImg3,
+    title: "Infraestructura y Equipos",
+    caption: "El respaldo tecnológico que tu espacio necesita.",
+  },*/
+];
 
 function Manifesto() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  // Estado para manejar el orden de las fotos en el efecto "tarjetero"
+  const [cards, setCards] = useState(realPhotos);
+
+  // Controla que el efecto de "caída de cartas" solo pase una vez al aparecer,
+  // y no se repita cada vez que el usuario le da clic para cambiar de foto
+  const [hasEntered, setHasEntered] = useState(false);
+
+  useEffect(() => {
+    if (!isInView || hasEntered) return;
+    const timer = setTimeout(() => setHasEntered(true), 1300);
+    return () => clearTimeout(timer);
+  }, [isInView, hasEntered]);
+
+  // Función para pasar a la siguiente tarjeta de la pila
+  const handleNextCard = () => {
+    setCards((prev) => {
+      const copy = [...prev];
+      const popped = copy.shift(); // Saca la primera
+      copy.push(popped); // La manda al final
+      return copy;
+    });
+  };
+
   return (
-    <section id="nosotros" className="relative py-30 lg:py-36 overflow-hidden">
+    <section ref={ref} id="nosotros" className="relative py-30 lg:py-36 overflow-hidden">
       {/* Fondo con brillo ambiental sutil */}
       <div 
         aria-hidden="true" 
@@ -32,8 +91,13 @@ function Manifesto() {
           lg:px-14
         "
       >
-        {/* ETIQUETA / LABEL */}
-        <div className="flex items-center gap-3 mb-8 lg:mb-12">
+        {/* ETIQUETA / LABEL ANIMADA */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="flex items-center gap-3 mb-8 lg:mb-12"
+        >
           <span className="w-2.5 h-2.5 rounded-full bg-[#e3cd5c] shadow-[0_0_10px_#e3cd5c]" />
           <p
             className="
@@ -47,10 +111,13 @@ function Manifesto() {
           >
             Quiénes somos
           </p>
-        </div>
+        </motion.div>
 
-        {/* MENSAJE PRINCIPAL / MANIFIESTO */}
-        <h2
+        {/* MENSAJE PRINCIPAL / MANIFIESTO ANIMADO */}
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="
             max-w-6xl
             text-4xl
@@ -80,9 +147,9 @@ function Manifesto() {
           >
             No complicarte.
           </span>
-        </h2>
+        </motion.h2>
 
-        {/* CONTENIDO INFERIOR: IMAGEN + TEXTO DESCRIPTIVO */}
+        {/* CONTENIDO INFERIOR: TARJETAS APILADAS + TEXTO DESCRIPTIVO */}
         <div
           className="
             mt-14
@@ -90,62 +157,92 @@ function Manifesto() {
             grid
             grid-cols-1
             lg:grid-cols-12
-            gap-10
+            gap-12
             lg:gap-16
             items-center
           "
         >
-          {/* COLUMNA IZQUIERDA: TARJETA DE IMAGEN */}
-          <div className="lg:col-span-6 relative group">
-            <div className="overflow-hidden rounded-3xl border border-neutral-200/80 bg-neutral-100 aspect-[16/10] sm:aspect-[16/9] lg:aspect-[4/3] relative">
-              <img
-                src={manifestImage}
-                alt="DT Total Infraestructura y Soluciones Tecnológicas"
-                className="
-                  w-full 
-                  h-full 
-                  object-cover 
-                  grayscale 
-                  contrast-125 
-                  group-hover:grayscale-0 
-                  group-hover:scale-105 
-                  transition-all 
-                  duration-700 
-                  ease-out
-                "
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
-            </div>
+          {/* COLUMNA IZQUIERDA: EFECTO TARJETERO MÁS GRANDE E INTERACTIVO */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+            animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+            className="lg:col-span-6 relative h-[420px] sm:h-[500px] flex items-center justify-center cursor-pointer select-none"
+            onClick={handleNextCard}
+            title="Haz clic para ver la siguiente foto"
+          >
+            {/* Contenedor ampliado */}
+            <div className="relative w-full max-w-[650px] aspect-[16/10]">
+              {cards.map((card, index) => {
+                const isTop = index === 0;
+                const isSecond = index === 1;
+                
+                // Encontramos el número de tarjeta real basado en su ID original dentro del arreglo general
+                const realIndex = realPhotos.findIndex((p) => p.id === card.id) + 1;
 
-            {/* BADGE FLOTANTE SOBRE LA IMAGEN */}
-            <div 
-              className="
-                absolute 
-                -bottom-5 
-                right-6 
-                sm:right-8 
-                bg-white/90 
-                backdrop-blur-md 
-                border 
-                border-neutral-200/80 
-                rounded-2xl 
-                px-5 
-                py-3 
-                shadow-lg 
-                flex 
-                items-center 
-                gap-3
-              "
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-800">
-                Soporte e Infraestructura
-              </span>
+                return (
+                  <motion.div
+                    key={card.id}
+                    initial={{
+                      opacity: 0,
+                      y: -260,
+                      rotate: index % 2 === 0 ? 14 : -14,
+                      scale: 0.85,
+                    }}
+                    animate={
+                      isInView
+                        ? {
+                            scale: isTop ? 1 : isSecond ? 0.94 : 0.88,
+                            y: isTop ? 0 : isSecond ? 22 : 44,
+                            rotate: isTop ? 0 : isSecond ? 2 : -2,
+                            zIndex: cards.length - index,
+                            opacity: isTop ? 1 : isSecond ? 0.5 : 0.2,
+                          }
+                        : { opacity: 0, y: -260 }
+                    }
+                    transition={
+                      hasEntered
+                        ? { duration: 0.4, ease: "easeInOut" }
+                        : { duration: 0.65, ease: "easeOut", delay: 0.3 + realIndex * 0.18 }
+                    }
+                    className="absolute inset-0 overflow-hidden rounded-3xl border border-neutral-200/90 bg-neutral-100 shadow-2xl shadow-black/15 origin-bottom"
+                  >
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className={`w-full h-full object-cover transition-all duration-700 ${
+                        isTop ? "grayscale-0 contrast-100" : "grayscale contrast-125"
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    
+                    {/* Información dentro de la tarjeta superior con contador dinámico */}
+                    {isTop && (
+                      <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between text-white">
+                        <div>
+                          <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#e3cd5c]">
+                            {card.title}
+                          </p>
+                          <p className="text-xs text-neutral-200 font-medium">
+                            {card.caption}
+                          </p>
+                        </div>
+                        <span className="text-[10px] sm:text-xs bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full uppercase tracking-widest border border-white/20">
+                          Toca para cambiar ({realIndex}/{realPhotos.length})
+                        </span>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
-          </div>
+          </motion.div>
 
-          {/* COLUMNA DERECHA: TEXTO EXPLICATIVO (Texto pulido y profesional) */}
-          <div
+          {/* COLUMNA DERECHA: TEXTO EXPLICATIVO */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
             className="
               lg:col-span-6
               pl-2
@@ -175,9 +272,9 @@ function Manifesto() {
                 leading-relaxed
               "
             >
-              Ayudamos a personas, negocios y empresas a encontrar el equipo, las herramientas y el respaldo tecnológico que realmente necesitan, con recomendaciones claras y soluciones pensadas para cada caso.
+              Ayudamos a personas, negocios y empresas a encontrar el equipo, la presencia web y el soporte técnico que realmente necesitan, con recomendaciones claras y soluciones pensadas para cada caso.
             </p>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
