@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +14,7 @@ import Counter from "./components/home/Counter";
 import Contact from "./components/home/Contact";
 import Footer from "./components/layout/Footer";
 
-import Catalog from "./pages/Catalog";
+const Catalog = lazy(() => import("./pages/Catalog"));
 import CircuitNetworkBackground from "./components/common/CircuitNetworkBackground";
 
 
@@ -130,8 +130,8 @@ function App() {
 
   return (
     <div className="relative bg-white min-h-screen text-neutral-900 flex flex-col overflow-x-hidden">
-      {/* FONDO ANIMADO: Lluvia de ceros y unos sutil estilo gota */}
-      <CircuitNetworkBackground />
+      {/* FONDO ANIMADO: solo en la landing principal, no en el resto de las páginas */}
+      {location.pathname === "/" && <CircuitNetworkBackground />}
 
       {/* LOGO BACKGROUND DECORATIVO GLOBAL (FIXED) con efecto flotante/aparición */}
       <motion.div
@@ -166,7 +166,20 @@ function App() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
-            <Route path="/catalog" element={<Catalog />} />
+            <Route
+              path="/catalog"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full flex items-center justify-center py-32 text-neutral-400 text-sm">
+                      Cargando catálogo…
+                    </div>
+                  }
+                >
+                  <Catalog />
+                </Suspense>
+              }
+            />
           </Routes>
         </AnimatePresence>
       </main>

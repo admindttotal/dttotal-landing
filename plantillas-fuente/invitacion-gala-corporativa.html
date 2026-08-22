@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0B1526">
+<title>Gala de Fin de Año</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Outfit:wght@300;400;500;600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --midnight:#0B1526;
+    --midnight-2:#132238;
+    --midnight-deep:#060B14;
+    --sapphire:#1E3A5F;
+    --platinum:#C9D6E3;
+    --platinum-light:#E8EEF4;
+    --silver:#9FB0C2;
+    --ice:#F5F8FC;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  /* scrollbar completamente invisible */
+  ::-webkit-scrollbar{ display: none; }
+
+  html{
+    scrollbar-width: none;
+    scroll-behavior:smooth;
+    overscroll-behavior-y:none;
+    background:var(--sky-bottom);
+  }
+  body{
+    background:var(--midnight);
+    color:var(--platinum-light);
+    font-family:'Outfit', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+    overscroll-behavior-y:none;
+  }
+  body:not(.opened){ overflow:hidden; height:100dvh; }
+  ::selection{ background:var(--platinum); color:var(--midnight-deep); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+  :focus-visible{ outline:2px solid var(--platinum); outline-offset:3px; }
+
+  h1,h2,h3,.display{ font-family:'Marcellus', serif; }
+  .eyebrow{
+    font-family:'Outfit', sans-serif; font-size:0.72rem; letter-spacing:0.36em; text-transform:uppercase;
+    color:var(--silver); font-weight:500;
+  }
+
+  /* ---------- watermark: constelacion geometrica ---------- */
+  .watermark{ position:fixed; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0.04; }
+  .watermark svg{ width:min(70vw, 560px); height:auto; }
+
+  /* ---------- particulas: nieve fina / brillo ---------- */
+  #glimmer{ position:fixed; inset:0; pointer-events:none; z-index:51; overflow:hidden; }
+  .glim{ position:absolute; top:-10px; border-radius:50%; background:var(--platinum-light); opacity:0; animation:glim-fall linear infinite; }
+  @keyframes glim-fall{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    12%{ opacity:0.75; } 88%{ opacity:0.4; }
+    100%{ transform:translateY(112vh) translateX(14px); opacity:0; }
+  }
+
+  /* ============ INTRO: LOS REFLECTORES DE LA PREMIERE ============ */
+  #lock{
+    position:fixed; inset:0; z-index:50; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(ellipse at 50% 100%, var(--sapphire) 0%, var(--midnight-deep) 70%);
+    opacity:1;
+    transition: opacity 0.6s ease 0s, visibility 0s linear 0.6s;
+  }
+  body.opened #lock{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  .beam{
+    position:absolute; bottom:-10%; left:50%; width:320px; height:140%; margin-left:-160px;
+    clip-path:polygon(47% 100%, 53% 100%, 100% 0%, 0% 0%);
+    background:linear-gradient(to top, rgba(232,238,244,0.16), transparent 72%);
+    transform-origin:bottom center;
+    animation:sweep-idle 7s ease-in-out infinite;
+  }
+  .beam.b2{ animation-delay:-2.3s; }
+  .beam.b3{ animation-delay:-4.6s; }
+  @keyframes sweep-idle{ 0%,100%{ transform:rotate(-24deg);} 50%{ transform:rotate(24deg);} }
+  body.opening .beam, body.opened .beam{ animation:sweep-idle 7s ease-in-out infinite, beam-fade 0.9s 0.4s ease forwards; }
+  @keyframes beam-fade{ to{ opacity:0; } }
+
+  .lock-center{ position:relative; z-index:2; text-align:center; display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
+  body.opening .lock-text, body.opened .lock-text{ opacity:0; transition:opacity .5s ease; }
+  .lock-text{ transition:opacity .5s ease; }
+  #lock .lock-eyebrow{ opacity:0.9; }
+
+  .medallion{
+    width:112px; height:112px; position:relative; cursor:pointer;
+    animation:medal-idle 3.4s ease-in-out infinite;
+  }
+  @keyframes medal-idle{ 0%,100%{ filter:drop-shadow(0 0 4px rgba(201,214,227,0.3));} 50%{ filter:drop-shadow(0 0 18px rgba(201,214,227,0.6));} }
+  .medallion-ring{ position:absolute; inset:0; border-radius:50%; border:1px solid var(--platinum); }
+  .medallion-ring2{ position:absolute; inset:8px; border-radius:50%; border:1px solid rgba(201,214,227,0.4); }
+  .medallion-core{ position:absolute; inset:14px; border-radius:50%; background:radial-gradient(circle, var(--sapphire), var(--midnight-deep)); display:flex; align-items:center; justify-content:center; }
+  .medallion-core span{ font-family:'Marcellus'; font-size:1.2rem; color:var(--platinum-light); letter-spacing:0.06em; }
+  body.opening .medallion, body.opened .medallion{ transform:scale(1.3); opacity:0; transition:transform .5s ease, opacity .5s ease; }
+
+  #lock .hint{ font-size:0.66rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--silver); margin-top:0.4rem; }
+
+  /* ---------- animaciones del hero tras abrir ---------- */
+  .line-divider.hero-mark, .hero .hero-eyebrow, .hero .title, .hero .tagline, .hero .date-line, .scroll-cue{ opacity:0; }
+  body.opened .hero-mark{ animation:fade-up 1s 0.15s ease forwards; }
+  body.opened .hero .hero-eyebrow{ animation:fade-up 0.9s 0.4s ease forwards; }
+  body.opened .hero .title{ animation:fade-up 1.1s 0.65s ease forwards; }
+  body.opened .hero .tagline{ animation:fade-up 0.9s 1.05s ease forwards; }
+  body.opened .hero .date-line{ animation:fade-up 0.9s 1.25s ease forwards; }
+  body.opened .scroll-cue{ animation:fade-up 0.9s 1.6s ease forwards, bob 2.6s 2.6s ease-in-out infinite; }
+  @keyframes fade-up{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
+
+  /* ---------- linea fina: firma visual reutilizada como divisor ---------- */
+  .line-divider{ display:flex; align-items:center; justify-content:center; gap:0.9rem; position:relative; z-index:2; }
+  .line-divider .bar{ width:60px; height:1px; background:linear-gradient(90deg, transparent, var(--platinum)); }
+  .line-divider .bar.right{ background:linear-gradient(90deg, var(--platinum), transparent); }
+  .line-divider .diamond{ width:7px; height:7px; border:1px solid var(--platinum); transform:rotate(45deg); }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative; min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:2.2rem 1.5rem; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,214,227,0.07), transparent 55%),
+      linear-gradient(180deg, var(--midnight-deep) 0%, var(--midnight) 60%, var(--midnight) 100%);
+  }
+  .hero::before{ content:""; position:absolute; inset:16px; border:1px solid rgba(201,214,227,0.18); pointer-events:none; }
+  .hero .hero-eyebrow{ position:relative; z-index:2; }
+  .hero .title{
+    position:relative; z-index:2; font-family:'Marcellus', serif; font-weight:400;
+    font-size:clamp(2.2rem, 8vw, 3.8rem); color:var(--platinum-light); letter-spacing:0.02em; line-height:1.2; margin-top:0.8rem;
+  }
+  .hero .tagline{ position:relative; z-index:2; font-size:1rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--silver); margin-top:0.9rem; }
+  .hero .date-line{ position:relative; z-index:2; font-size:0.85rem; letter-spacing:0.16em; color:var(--platinum); margin-top:0.7rem; }
+  .scroll-cue{
+    position:fixed; bottom:clamp(1rem, 4dvh, 2.4rem); left:0; right:0; margin:0 auto; width:max-content;
+    display:flex; flex-direction:column; align-items:center; gap:0.4rem; z-index:6; transition:opacity 0.4s ease; cursor:pointer;
+  }
+  .scroll-cue.hide{ opacity:0 !important; pointer-events:none; }
+  .scroll-cue span{ font-size:0.62rem; letter-spacing:0.3em; color:var(--silver); text-transform:uppercase; }
+
+  /* ============ SECTIONS ============ */
+  section{ position:relative; z-index:2; padding:5.5rem 1.5rem; max-width:880px; margin:0 auto; text-align:center; }
+  .section-wrap{ position:relative; overflow:hidden; }
+  .section-wrap::before{ content:""; position:absolute; inset:0; z-index:0; opacity:0.6; pointer-events:none; }
+  .tint-a::before{ background:radial-gradient(ellipse at 12% 15%, rgba(201,214,227,0.05), transparent 55%); }
+  .tint-b::before{ background:radial-gradient(ellipse at 88% 85%, rgba(30,58,95,0.4), transparent 55%); }
+
+  .reveal{ opacity:0; transform:translateY(26px); filter:blur(3px); transition:opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1), filter 0.9s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); filter:blur(0); }
+
+  .sec-icon{ display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border:1px solid var(--platinum); color:var(--platinum); margin-bottom:1rem; transform:rotate(45deg); }
+  .sec-icon svg{ width:18px; height:18px; transform:rotate(-45deg); }
+  section h2{ font-family:'Marcellus'; font-size:clamp(1.8rem, 4.5vw, 2.4rem); font-weight:400; margin:0.6rem 0 1.4rem; color:var(--platinum-light); letter-spacing:0.01em; }
+  section > p{ font-size:1rem; line-height:1.9; color:var(--silver); max-width:580px; margin:0 auto; }
+
+  /* ---------- mensaje ---------- */
+  .exec-quote{ font-family:'Marcellus'; font-size:1.2rem; line-height:1.9; color:var(--platinum-light); margin-top:1.6rem; max-width:560px; margin-left:auto; margin-right:auto; }
+  .exec-sign{ margin-top:1.2rem; font-size:0.82rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--silver); }
+
+  /* ---------- logros del año ---------- */
+  .stats-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:1.2rem; margin-top:2.4rem; }
+  @media (max-width:640px){ .stats-grid{ grid-template-columns:1fr; } }
+  .stat-card{ padding:1.6rem 1.2rem; border:1px solid rgba(201,214,227,0.2); }
+  .stat-card .num{ font-family:'Marcellus'; font-size:2.4rem; color:var(--platinum-light); line-height:1; }
+  .stat-card .lbl{ font-size:0.78rem; letter-spacing:0.08em; color:var(--silver); margin-top:0.6rem; }
+
+  /* ---------- itinerario ---------- */
+  .timeline{ position:relative; margin-top:3rem; max-width:500px; margin-left:auto; margin-right:auto; text-align:left; }
+  .timeline::before{ content:""; position:absolute; left:19px; top:6px; bottom:6px; width:1px; background:repeating-linear-gradient(180deg, var(--platinum) 0 6px, transparent 6px 12px); }
+  .t-stop{ position:relative; padding:0 0 2.5rem 3.4rem; }
+  .t-stop:last-child{ padding-bottom:0; }
+  .t-dot{ position:absolute; left:10px; top:2px; width:20px; height:20px; background:var(--midnight); border:1px solid var(--platinum); display:flex; align-items:center; justify-content:center; transform:rotate(45deg); }
+  .t-dot svg{ width:10px; height:10px; transform:rotate(-45deg); }
+  .t-time{ font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--platinum); }
+  .t-title{ font-family:'Marcellus'; font-size:1.3rem; margin:0.25rem 0 0.3rem; color:var(--platinum-light); }
+  .t-place{ font-size:0.86rem; color:var(--silver); }
+
+  /* ---------- codigo de vestimenta ---------- */
+  .palette{ display:flex; justify-content:center; gap:0.9rem; margin-top:2rem; flex-wrap:wrap; }
+  .swatch{ width:38px; height:38px; border:1px solid rgba(201,214,227,0.4); transform:rotate(45deg); transition:transform 0.3s ease; }
+  .swatch:hover{ transform:rotate(45deg) scale(1.2); }
+
+  /* ---------- galeria ---------- */
+  .gallery-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:0.9rem; margin-top:2.4rem; }
+  @media (max-width:640px){ .gallery-grid{ grid-template-columns:repeat(2, 1fr); } }
+  .gallery-grid figure{ position:relative; overflow:hidden; aspect-ratio:1/1; border:1px solid rgba(201,214,227,0.2); }
+  .gallery-grid img{ width:100%; height:100%; object-fit:cover; filter:grayscale(0.1) contrast(1.05); transition:transform 0.6s ease, filter 0.6s ease; }
+  .gallery-grid figure:hover img{ transform:scale(1.08); filter:grayscale(0) contrast(1.1); }
+  .gallery-grid figure::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 60%, rgba(6,11,20,0.6)); pointer-events:none; }
+
+  /* ---------- ubicacion ---------- */
+  .venue-links{ display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:2.2rem; }
+  .venue-links a{
+    border:1px solid var(--platinum); color:var(--platinum-light); text-decoration:none; padding:0.85rem 1.9rem;
+    font-family:'Outfit'; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; transition:all 0.3s ease;
+  }
+  .venue-links a:hover{ background:var(--platinum); color:var(--midnight-deep); }
+
+  /* ---------- rsvp ---------- */
+  .rsvp form{ display:flex; flex-direction:column; gap:1.1rem; max-width:420px; margin:2.2rem auto 0; }
+  .field{ text-align:left; }
+  .field label{ display:block; font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--silver); margin-bottom:0.4rem; }
+  .field input{ width:100%; background:transparent; border:none; border-bottom:1px solid rgba(201,214,227,0.35); color:var(--platinum-light); font-family:'Outfit'; font-size:1rem; padding:0.5rem 0.1rem; outline:none; transition:border-color 0.3s ease; }
+  .field input:focus{ border-bottom-color:var(--platinum); }
+  .toggle{ display:flex; gap:0.8rem; }
+  .toggle button{ flex:1; padding:0.7rem; background:transparent; border:1px solid rgba(201,214,227,0.4); color:var(--platinum-light); font-family:'Outfit'; letter-spacing:0.05em; cursor:pointer; transition:all .25s ease; }
+  .toggle button.active{ background:var(--platinum); color:var(--midnight-deep); border-color:var(--platinum); }
+  .submit{ margin-top:0.6rem; padding:0.9rem; background:linear-gradient(120deg, var(--platinum), var(--silver)); color:var(--midnight-deep); border:none; font-family:'Marcellus'; letter-spacing:0.04em; font-size:1rem; cursor:pointer; transition:transform .2s ease; }
+  .submit:hover{ transform:translateY(-2px); }
+  .confirm-msg{ display:none; margin-top:1.6rem; color:var(--platinum-light); font-family:'Marcellus'; font-size:1.2rem; }
+  .rsvp-count{ font-size:0.75rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--silver); margin-top:0.6rem; }
+  .rsvp-count strong{ color:var(--platinum-light); }
+
+  footer{ text-align:center; padding:3rem 1.5rem 4rem; color:var(--silver); font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; position:relative; z-index:2; }
+
+  /* ---------- lightbox ---------- */
+  .lightbox{ position:fixed; inset:0; z-index:80; background:rgba(6,11,20,0.95); display:none; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s ease; }
+  .lightbox.open{ display:flex; opacity:1; }
+  .lightbox-img{ max-width:min(88vw, 560px); max-height:78vh; object-fit:contain; border:1px solid rgba(201,214,227,0.35); box-shadow:0 20px 60px rgba(0,0,0,0.6); user-select:none; -webkit-user-drag:none; }
+  .lightbox-close{ position:absolute; top:1.2rem; right:1.2rem; width:42px; height:42px; border-radius:50%; background:rgba(201,214,227,0.1); border:1px solid var(--platinum); color:var(--platinum-light); font-size:1.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .lightbox-nav{ position:absolute; top:50%; transform:translateY(-50%); width:46px; height:46px; border-radius:50%; background:rgba(201,214,227,0.1); border:1px solid var(--platinum); color:var(--platinum-light); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .lightbox-nav.prev{ left:1rem; } .lightbox-nav.next{ right:1rem; }
+  .lightbox-dots{ position:absolute; bottom:1.4rem; left:50%; transform:translateX(-50%); display:flex; gap:0.5rem; }
+  .lightbox-dots span{ width:7px; height:7px; border-radius:50%; background:rgba(201,214,227,0.3); }
+  .lightbox-dots span.active{ background:var(--platinum-light); }
+  @media (max-width:640px){ .lightbox-nav{ width:38px; height:38px; } .lightbox-nav.prev{ left:0.4rem; } .lightbox-nav.next{ right:0.4rem; } }
+
+  /* ---------- music toggle ---------- */
+  #music-btn{
+    position:fixed; bottom:22px; right:22px; z-index:40; width:52px; height:52px; border-radius:50%;
+    background:linear-gradient(135deg, var(--platinum), var(--silver)); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.4);
+    transition:transform 0.25s ease, opacity 0.5s ease; opacity:0; pointer-events:none;
+  }
+  body.opened #music-btn{ opacity:1; pointer-events:auto; }
+  #music-btn:hover{ transform:scale(1.08); }
+  #music-btn svg{ width:22px; height:22px; color:var(--midnight-deep); }
+  #music-btn.playing svg .bar{ animation:eq 0.9s ease-in-out infinite; }
+  #music-btn.playing svg .bar:nth-child(2){ animation-delay:0.15s; }
+  #music-btn.playing svg .bar:nth-child(3){ animation-delay:0.3s; }
+  @keyframes eq{ 0%,100%{ transform:scaleY(0.4);} 50%{ transform:scaleY(1);} }
+</style>
+</head>
+<body>
+
+<div class="watermark" aria-hidden="true">
+  <svg viewBox="0 0 200 200" fill="none" stroke="var(--platinum)" stroke-width="0.8">
+    <circle cx="100" cy="100" r="4" fill="var(--platinum)"/>
+    <circle cx="60" cy="60" r="2.5" fill="var(--platinum)"/>
+    <circle cx="150" cy="50" r="2" fill="var(--platinum)"/>
+    <circle cx="150" cy="150" r="3" fill="var(--platinum)"/>
+    <circle cx="40" cy="140" r="2" fill="var(--platinum)"/>
+    <line x1="100" y1="100" x2="60" y2="60"/><line x1="100" y1="100" x2="150" y2="50"/>
+    <line x1="100" y1="100" x2="150" y2="150"/><line x1="100" y1="100" x2="40" y2="140"/>
+  </svg>
+</div>
+
+<div id="glimmer"></div>
+
+<div id="lock">
+  <div class="beam"></div>
+  <div class="beam b2"></div>
+  <div class="beam b3"></div>
+  <div class="lock-center">
+    <div class="lock-text">
+      <p class="lock-eyebrow eyebrow">Grupo Corporativo presenta</p>
+      <p class="lock-name display" style="font-size:1.6rem; color:var(--platinum-light);">Gala de Fin de Año</p>
+    </div>
+    <div class="medallion" onclick="openInvite()">
+      <div class="medallion-ring"></div>
+      <div class="medallion-ring2"></div>
+      <div class="medallion-core"><span>2026</span></div>
+    </div>
+    <p class="hint">Toca el emblema para comenzar la noche</p>
+  </div>
+</div>
+
+<div id="spotify-embed" style="position:fixed; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none; left:-9999px;"></div>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
+<button id="music-btn" onclick="toggleMusic()" aria-label="Reproducir música">
+  <svg viewBox="0 0 24 24"><rect class="bar" x="4" y="9" width="3" height="6" rx="1.5" fill="currentColor"/><rect class="bar" x="10.5" y="5" width="3" height="14" rx="1.5" fill="currentColor"/><rect class="bar" x="17" y="9" width="3" height="6" rx="1.5" fill="currentColor"/></svg>
+</button>
+
+<section class="hero">
+  <div class="line-divider hero-mark"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+  <p class="hero-eyebrow eyebrow">Grupo Corporativo presenta</p>
+  <h1 class="title">Gala de Fin de Año</h1>
+  <p class="tagline">Una noche para celebrar lo que construimos juntos</p>
+  <p class="date-line">12 de diciembre, 2026 — 8:00 PM — Salón Cristal, Hotel Presidente</p>
+
+  <div class="scroll-cue" onclick="smoothScrollCue()">
+    <span>Desliza</span>
+    <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 0V19M7 19L1 13M7 19L13 13" stroke="#C9D6E3" stroke-width="1.3"/></svg>
+  </div>
+</section>
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<div class="section-wrap tint-a">
+  <section class="countdown-section">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div>
+    <p class="eyebrow reveal">Cuenta regresiva</p>
+    <h2 class="reveal">Falta poco</h2>
+    <div class="countdown reveal" style="display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap; margin-top:2.5rem;">
+      <div style="width:86px; border:1px solid rgba(201,214,227,0.3); padding:1rem 0.4rem; background:rgba(201,214,227,0.04);"><span style="font-family:'Marcellus'; font-size:2.1rem; color:var(--platinum-light); display:block; line-height:1;" id="cd-days">--</span><span style="font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--silver);">Días</span></div>
+      <div style="width:86px; border:1px solid rgba(201,214,227,0.3); padding:1rem 0.4rem; background:rgba(201,214,227,0.04);"><span style="font-family:'Marcellus'; font-size:2.1rem; color:var(--platinum-light); display:block; line-height:1;" id="cd-hours">--</span><span style="font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--silver);">Horas</span></div>
+      <div style="width:86px; border:1px solid rgba(201,214,227,0.3); padding:1rem 0.4rem; background:rgba(201,214,227,0.04);"><span style="font-family:'Marcellus'; font-size:2.1rem; color:var(--platinum-light); display:block; line-height:1;" id="cd-min">--</span><span style="font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--silver);">Min</span></div>
+      <div style="width:86px; border:1px solid rgba(201,214,227,0.3); padding:1rem 0.4rem; background:rgba(201,214,227,0.04);"><span style="font-family:'Marcellus'; font-size:2.1rem; color:var(--platinum-light); display:block; line-height:1;" id="cd-sec">--</span><span style="font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--silver);">Seg</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="message">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8 14c1.5 1.5 6.5 1.5 8 0M9 9h.01M15 9h.01"/></svg></div>
+    <p class="eyebrow reveal">Un mensaje</p>
+    <h2 class="reveal">De parte de la Dirección</h2>
+    <p class="exec-quote reveal">"Este año superamos nuestras propias metas gracias al esfuerzo de cada persona en este equipo. Los invitamos a celebrarlo con la elegancia que se merece."</p>
+    <p class="exec-sign reveal">— Dirección General</p>
+  </section>
+</div>
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<!-- LOGROS DEL AÑO: reemplaza las cifras por los datos reales de la empresa -->
+<div class="section-wrap tint-a">
+  <section class="stats">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12l1 6-3 2v10H8V11L5 9l1-6z"/></svg></div>
+    <p class="eyebrow reveal">Nuestro año en números</p>
+    <h2 class="reveal">Lo que logramos juntos</h2>
+    <div class="stats-grid">
+      <div class="stat-card reveal"><p class="num">+32%</p><p class="lbl">Crecimiento anual</p></div>
+      <div class="stat-card reveal"><p class="num">+18</p><p class="lbl">Nuevas contrataciones</p></div>
+      <div class="stat-card reveal"><p class="num">96%</p><p class="lbl">Satisfacción de clientes</p></div>
+    </div>
+  </section>
+</div>
+<!-- FIN LOGROS DEL AÑO -->
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="itinerary">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+    <p class="eyebrow reveal">La noche paso a paso</p>
+    <h2 class="reveal">Programa</h2>
+    <div class="timeline">
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--platinum)" stroke-width="2"><path d="M4 21V9l8-6 8 6v12M9 21v-7h6v7"/></svg></div><span class="t-time">8:00 PM</span><h3 class="t-title">Recepción &amp; cóctel de bienvenida</h3><p class="t-place">Vestíbulo Salón Cristal</p></div>
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--platinum)" stroke-width="2"><path d="M4 22h16M6 22V10l6-6 6 6v12"/></svg></div><span class="t-time">9:00 PM</span><h3 class="t-title">Cena de gala</h3><p class="t-place">Salón principal</p></div>
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--platinum)" stroke-width="2"><path d="M12 3l2.2 4.6 5 .7-3.6 3.6.8 5.1L12 14.6 7.6 17l.8-5.1L4.8 8.3l5-.7L12 3z"/></svg></div><span class="t-time">10:00 PM</span><h3 class="t-title">Reconocimientos del año</h3><p class="t-place">Escenario principal</p></div>
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--platinum)" stroke-width="2"><path d="M9 18V5l12-2v13M9 9l12-2M6 21a3 3 0 100-6 3 3 0 000 6zM18 19a3 3 0 100-6 3 3 0 000 6z"/></svg></div><span class="t-time">10:45 PM</span><h3 class="t-title">Baile &amp; entretenimiento en vivo</h3><p class="t-place">Pista principal</p></div>
+    </div>
+  </section>
+</div>
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<div class="section-wrap tint-a">
+  <section class="code">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12l1 6-3 2v10H8V11L5 9l1-6z"/></svg></div>
+    <p class="eyebrow reveal">Código de vestimenta</p>
+    <h2 class="reveal">Etiqueta rigurosa</h2>
+    <p class="reveal">Una noche de gala. Esmoquin o traje oscuro, vestidos largos o cocktail elegante.</p>
+    <div class="palette reveal">
+      <div class="swatch" style="background:#0B1526;"></div>
+      <div class="swatch" style="background:#1E3A5F;"></div>
+      <div class="swatch" style="background:#C9D6E3;"></div>
+      <div class="swatch" style="background:#E8EEF4;"></div>
+    </div>
+  </section>
+</div>
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="gallery">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg></div>
+    <p class="eyebrow reveal">Momentos</p>
+    <h2 class="reveal">Galería</h2>
+    <div class="gallery-grid">
+      <!-- FOTO 1/6 — reemplaza el src="..." por el link o archivo de la foto real -->
+      <figure class="reveal" onclick="openLightbox(0)"><img src="https://images.unsplash.com/photo-1653821355736-0c2598d0a63e?w=500&q=60" alt="Foto 1"></figure>
+      <!-- FOTO 2/6 -->
+      <figure class="reveal" onclick="openLightbox(1)"><img src="https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e?w=500&q=60" alt="Foto 2"></figure>
+      <!-- FOTO 3/6 -->
+      <figure class="reveal" onclick="openLightbox(2)"><img src="https://images.unsplash.com/photo-1653821355226-6def361cc7ab?w=500&q=60" alt="Foto 3"></figure>
+      <!-- FOTO 4/6 -->
+      <figure class="reveal" onclick="openLightbox(3)"><img src="https://images.unsplash.com/photo-1606744038221-5e0fa1c68fe6?w=500&q=60" alt="Foto 4"></figure>
+      <!-- FOTO 5/6 -->
+      <figure class="reveal" onclick="openLightbox(4)"><img src="https://images.unsplash.com/photo-1768508950719-4d76978fdf44?w=500&q=60" alt="Foto 5"></figure>
+      <!-- FOTO 6/6 -->
+      <figure class="reveal" onclick="openLightbox(5)"><img src="https://images.unsplash.com/photo-1651065698373-f310e3b99326?w=500&q=60" alt="Foto 6"></figure>
+    </div>
+  </section>
+</div>
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<div class="section-wrap tint-a">
+  <section class="venue">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-7-7-12a7 7 0 0114 0c0 5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+    <p class="eyebrow reveal">Cómo llegar</p>
+    <h2 class="reveal">Ubicación</h2>
+    <p class="reveal">Salón Cristal, Hotel Presidente — valet parking disponible en la entrada principal.</p>
+    <div class="venue-links reveal">
+      <a href="#" target="_blank" rel="noopener">Ver en Google Maps</a>
+      <a href="#" target="_blank" rel="noopener">Cómo llegar en Waze</a>
+    </div>
+  </section>
+</div>
+
+<div class="line-divider"><div class="bar"></div><div class="diamond"></div><div class="bar right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="rsvp">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v14H8l-4 4V4z"/><path d="M8 9h8M8 13h5"/></svg></div>
+    <p class="eyebrow reveal">Confirma tu asistencia</p>
+    <h2 class="reveal">Te esperamos</h2>
+    <form class="reveal" id="rsvp-form">
+      <div class="field">
+        <label for="name">Nombre completo</label>
+        <input type="text" id="name" required placeholder="Tu nombre">
+      </div>
+      <div class="field">
+        <label for="dept">Área o departamento</label>
+        <input type="text" id="dept" placeholder="Ej: Ventas, Sistemas, Dirección">
+      </div>
+      <div class="field">
+        <label>¿Nos acompañas?</label>
+        <div class="toggle">
+          <button type="button" class="opt active" data-val="si">Sí, ahí estaré</button>
+          <button type="button" class="opt" data-val="no">No podré ir</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="guests">¿Vienes con acompañante?</label>
+        <input type="number" id="guests" min="0" max="1" value="0">
+      </div>
+      <button type="submit" class="submit" id="submit-btn">Confirmar</button>
+    </form>
+    <p class="confirm-msg" id="confirm-msg">Gracias — será un honor celebrar con ustedes.</p>
+    <p class="rsvp-count" id="rsvp-count">Cargando confirmaciones…</p>
+  </section>
+</div>
+
+<!-- ---------- GALERÍA: modal carrusel ---------- -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this) closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Cerrar">&times;</button>
+  <button class="lightbox-nav prev" onclick="lbNav(-1)" aria-label="Anterior">&#10094;</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  <button class="lightbox-nav next" onclick="lbNav(1)" aria-label="Siguiente">&#10095;</button>
+  <div class="lightbox-dots" id="lightbox-dots"></div>
+</div>
+
+<footer>Grupo Corporativo · Gala de Fin de Año · 12 · Diciembre · 2026</footer>
+
+<script>
+  // brillo fino cayendo (nieve elegante)
+  const glimEl = document.getElementById('glimmer');
+  for(let i=0;i<24;i++){
+    const g = document.createElement('div');
+    g.className = 'glim';
+    g.style.left = Math.random()*100+'%';
+    const size = 2+Math.random()*3;
+    g.style.width = size+'px'; g.style.height = size+'px';
+    g.style.animationDuration = (10+Math.random()*9)+'s';
+    g.style.animationDelay = (Math.random()*14)+'s';
+    glimEl.appendChild(g);
+  }
+
+  function smoothScrollCue() {
+    const targetEl = document.querySelector('.section-wrap');
+    if (!targetEl) return;
+    const target = targetEl.getBoundingClientRect().top + window.scrollY;
+    const start = window.scrollY;
+    const dist = target - start;
+    const duration = 2000;
+    let startTime = null;
+    const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const step = (ts) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      window.scrollTo({ top: start + dist * ease(progress), behavior: 'auto' });
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // ---------- lightbox / carrusel de galería ----------
+  const galleryPhotos = [
+    'https://images.unsplash.com/photo-1653821355736-0c2598d0a63e?w=1000&q=70',
+    'https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e?w=1000&q=70',
+    'https://images.unsplash.com/photo-1653821355226-6def361cc7ab?w=1000&q=70',
+    'https://images.unsplash.com/photo-1606744038221-5e0fa1c68fe6?w=1000&q=70',
+    'https://images.unsplash.com/photo-1768508950719-4d76978fdf44?w=1000&q=70',
+    'https://images.unsplash.com/photo-1651065698373-f310e3b99326?w=1000&q=70',
+  ];
+  let lbIndex = 0;
+  let lbAutoplay = null;
+  const lbEl = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbDots = document.getElementById('lightbox-dots');
+  galleryPhotos.forEach(()=>{ lbDots.appendChild(document.createElement('span')); });
+  function lbRender(){
+    lbImg.src = galleryPhotos[lbIndex];
+    [...lbDots.children].forEach((d,i)=> d.classList.toggle('active', i===lbIndex));
+  }
+  function lbStartAutoplay(){ clearInterval(lbAutoplay); lbAutoplay = setInterval(()=> lbNav(1), 3200); }
+  function openLightbox(i){ lbIndex = i; lbRender(); lbEl.classList.add('open'); lbStartAutoplay(); }
+  function closeLightbox(){ lbEl.classList.remove('open'); clearInterval(lbAutoplay); }
+  function lbNav(dir){ lbIndex = (lbIndex + dir + galleryPhotos.length) % galleryPhotos.length; lbRender(); lbStartAutoplay(); }
+  let lbTouchX = null;
+  lbImg.addEventListener('touchstart', (e)=>{ lbTouchX = e.touches[0].clientX; });
+  lbImg.addEventListener('touchend', (e)=>{
+    if(lbTouchX===null) return;
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+    if(Math.abs(dx) > 40){ lbNav(dx < 0 ? 1 : -1); }
+    lbTouchX = null;
+  });
+
+  window.addEventListener('scroll', ()=>{
+    const cue = document.querySelector('.scroll-cue');
+    if(!cue) return;
+    if(window.scrollY > 60){ cue.classList.add('hide'); } else { cue.classList.remove('hide'); }
+  });
+
+  // scroll reveal con stagger
+  const revealEls = document.querySelectorAll('.reveal');
+  revealEls.forEach((el, i)=>{ el.style.transitionDelay = ((i % 6) * 0.08) + 's'; });
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });
+  }, {threshold:0.18});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+  // cuenta regresiva al 12 de diciembre 2026, 8:00 PM
+  const target = new Date('2026-12-12T20:00:00');
+  function tick(){
+    const now = new Date();
+    let diff = Math.max(0, target - now);
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor(diff%86400000/3600000);
+    const m = Math.floor(diff%3600000/60000);
+    const s = Math.floor(diff%60000/1000);
+    document.getElementById('cd-days').textContent = d;
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  // apertura: los reflectores de la premiere convergen
+  function openInvite(){
+    if(document.body.classList.contains('opening') || document.body.classList.contains('opened')) return;
+    document.body.classList.add('opening');
+    setTimeout(()=>{ document.body.classList.add('opened'); }, 1250);
+    playSpotify();
+  }
+
+  // ---------- música (Spotify — reproduce el preview y lo repite en loop) ----------
+  const SPOTIFY_TRACK_URI = ''; // cuando tengan la canción real, avísame y la cambio
+  let spotifyController = null;
+  let wantsPlayOnReady = false;
+  let userPaused = false;
+
+  window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    const element = document.getElementById('spotify-embed');
+    const options = { uri: SPOTIFY_TRACK_URI, width: '1', height: '1' };
+    IFrameAPI.createController(element, options, (EmbedController) => {
+      spotifyController = EmbedController;
+      spotifyController.addListener('playback_update', (e) => {
+        const btn = document.getElementById('music-btn');
+        if(!e || !e.data) return;
+        const { isPaused, position, duration } = e.data;
+        if(!isPaused){ btn.classList.add('playing'); }
+        else {
+          btn.classList.remove('playing');
+          if(!userPaused && duration && position >= duration - 1000){
+            spotifyController.seek(0);
+            spotifyController.play();
+          }
+        }
+      });
+      if(wantsPlayOnReady){ spotifyController.play(); wantsPlayOnReady = false; }
+    });
+  };
+  function playSpotify(){
+    userPaused = false;
+    if(spotifyController){ spotifyController.play(); } else { wantsPlayOnReady = true; }
+  }
+  function toggleMusic(){
+    if(!spotifyController){ wantsPlayOnReady = true; return; }
+    const btn = document.getElementById('music-btn');
+    userPaused = btn.classList.contains('playing');
+    spotifyController.togglePlay();
+  }
+
+  // RSVP toggle
+  let asistencia = 'si';
+  document.querySelectorAll('.toggle .opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.toggle .opt').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      asistencia = btn.dataset.val;
+    });
+  });
+
+  async function refreshCount(){
+    const el = document.getElementById('rsvp-count');
+    try{
+      const list = await window.storage.list('rsvp:', true);
+      const keys = (list && list.keys) ? list.keys : [];
+      let confirmed = 0;
+      for(const k of keys){
+        try{
+          const r = await window.storage.get(k, true);
+          if(r && r.value){
+            const data = JSON.parse(r.value);
+            if(data.asistencia === 'si') confirmed++;
+          }
+        }catch(_e){}
+      }
+      el.innerHTML = keys.length
+        ? `<strong>${confirmed}</strong> personas han confirmado su asistencia`
+        : 'Sé el primero en confirmar';
+    }catch(err){
+      el.textContent = '';
+      console.error('No se pudo leer el conteo de RSVP', err);
+    }
+  }
+
+  document.getElementById('rsvp-form').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    const name = document.getElementById('name').value.trim();
+    const dept = document.getElementById('dept').value.trim();
+    const guests = document.getElementById('guests').value;
+    if(!name) return;
+    btn.textContent = 'Enviando…';
+    btn.disabled = true;
+
+    try{
+      const key = 'rsvp:' + Date.now() + '-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      await window.storage.set(key, JSON.stringify({ name, dept, asistencia, guests, ts: Date.now() }), true);
+      refreshCount();
+    }catch(err){ /* si no está disponible fuera de Claude, no pasa nada */ }
+
+    const ORGANIZADOR_WHATSAPP = '521XXXXXXXXXX'; // reemplaza por el número real: código de país + número, sin + ni espacios
+    const deptTxt = dept ? ` (${dept})` : '';
+    const msg = asistencia === 'si'
+      ? `¡Hola! Soy ${name}${deptTxt}. Confirmo que SÍ asistiré a la Gala de Fin de Año. Acompañante: ${guests}.`
+      : `Hola, soy ${name}${deptTxt}. Lamento informarles que no podré asistir a la Gala de Fin de Año.`;
+    window.open(`https://wa.me/${ORGANIZADOR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    document.getElementById('rsvp-form').style.display='none';
+    document.getElementById('confirm-msg').style.display='block';
+  });
+
+  refreshCount();
+</script>
+
+</body>
+</html>

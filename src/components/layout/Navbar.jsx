@@ -129,7 +129,7 @@ function Navbar() {
               </div>
             </Link>
 
-            {/* MENU DESKTOP (Sin Software) */}
+            {/* MENU DESKTOP */}
             <nav
               className="
                 hidden
@@ -177,7 +177,7 @@ function Navbar() {
                 </a>
               ))}
 
-              {/* OPCIÓN CATÁLOGO CON BADGE */}
+              {/* OPCIÓN CATÁLOGO CON BADGE "NUEVO" Y PULSO */}
               <div className="relative flex items-center group/catalog mr-2">
                 <Link
                   to="/catalog"
@@ -216,16 +216,20 @@ function Navbar() {
                     px-1.5
                     py-0.5
                     rounded-full
-                    bg-[#e3cd5c]/20
-                    text-neutral-800
+                    bg-black
+                    text-white
                     border
-                    border-[#e3cd5c]/50
+                    border-neutral-800
                     pointer-events-none
                     whitespace-nowrap
                     select-none
+                    flex
+                    items-center
+                    gap-1
                   "
                 >
-                  Próximamente
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#e3cd5c] animate-pulse"></span>
+                  Nuevo
                 </span>
               </div>
             </nav>
@@ -286,7 +290,7 @@ function Navbar() {
             </button>
           </div>
 
-          {/* MENÚ MÓVIL DESPLEGABLE (Sin Software) */}
+          {/* MENÚ MÓVIL DESPLEGABLE */}
           {isOpen && (
             <div
               className="
@@ -336,13 +340,17 @@ function Navbar() {
                       px-2
                       py-0.5
                       rounded-full
-                      bg-[#e3cd5c]/20
-                      text-neutral-800
+                      bg-black
+                      text-white
                       border
-                      border-[#e3cd5c]/50
+                      border-neutral-800
+                      flex
+                      items-center
+                      gap-1.5
                     "
                   >
-                    Próximamente
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#e3cd5c] animate-pulse"></span>
+                    Nuevo
                   </span>
                 </div>
               </nav>

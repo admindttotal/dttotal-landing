@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#14100D">
+<title>Roberto — 50 Años</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Permanent+Marker&family=Rubik:wght@300;400;500;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Permanent+Marker&family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#14100D;
+    --noir-2:#1F1712;
+    --noir-deep:#0B0806;
+    --wine:#6B1E2B;
+    --wine-deep:#4A1420;
+    --brass:#C9A66B;
+    --brass-light:#E8CDA0;
+    --cream:#F2E9DC;
+    --cream-soft:#B8AC98;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  /* scrollbar completamente invisible */
+  ::-webkit-scrollbar{ display: none; }
+
+  html{
+    scrollbar-width: none;
+    scroll-behavior:smooth;
+    overscroll-behavior-y:none;
+    background:var(--sky-bottom);
+  }
+  body{
+    background:var(--noir);
+    color:var(--cream);
+    font-family:'Rubik', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+    overscroll-behavior-y:none;
+  }
+  body:not(.opened){ overflow:hidden; height:100dvh; }
+  ::selection{ background:var(--brass); color:var(--noir-deep); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+  :focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
+
+  h1,h2,h3,.display{ font-family:'Abril Fatface', serif; }
+  .marker{ font-family:'Permanent Marker', cursive; }
+  .eyebrow{
+    font-family:'Rubik', sans-serif; font-size:0.72rem; letter-spacing:0.32em; text-transform:uppercase;
+    color:var(--brass); font-weight:500;
+  }
+
+  /* ---------- watermark: ondas de sonido concentricas ---------- */
+  .watermark{ position:fixed; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0.04; }
+  .watermark svg{ width:min(65vw, 520px); height:auto; }
+
+  /* ---------- notas musicales ambientales ---------- */
+  #notes{ position:fixed; inset:0; pointer-events:none; z-index:51; overflow:hidden; }
+  .note{ position:absolute; bottom:-24px; color:var(--brass); opacity:0; font-size:1rem; animation:note-rise linear infinite; }
+  @keyframes note-rise{
+    0%{ transform:translateY(0) rotate(0deg); opacity:0; }
+    12%{ opacity:0.6; } 88%{ opacity:0.35; }
+    100%{ transform:translateY(-100vh) rotate(25deg); opacity:0; }
+  }
+
+  /* ============ INTRO: LA AGUJA CAE SOBRE EL VINILO ============ */
+  #lock{
+    position:fixed; inset:0; z-index:50;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(ellipse at 50% 45%, var(--noir-2) 0%, var(--noir-deep) 75%);
+    opacity:1;
+    transition: opacity 0.6s ease 0s, visibility 0s linear 0.6s;
+  }
+  body.opened #lock{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  .lock-center{ position:relative; z-index:2; text-align:center; display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
+  #lock .lock-eyebrow{ opacity:0.9; }
+  body.opening .lock-text, body.opened .lock-text{ opacity:0; transition:opacity .5s ease; }
+  .lock-text{ transition:opacity .5s ease; }
+
+  .turntable-wrap{ position:relative; width:190px; height:190px; cursor:pointer; }
+  .vinyl{
+    width:100%; height:100%; border-radius:50%;
+    background:
+      repeating-radial-gradient(circle at center, #0c0a08 0 3px, #1c1712 3px 6px);
+    box-shadow:0 14px 34px rgba(0,0,0,0.55);
+    animation:spin-idle 7s linear infinite;
+  }
+  body.opening .vinyl, body.opened .vinyl{ animation:spin-fast 0.6s linear infinite; }
+  @keyframes spin-idle{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  @keyframes spin-fast{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  .vinyl-label{
+    position:absolute; inset:36%; border-radius:50%; border:2px solid var(--brass);
+    background:radial-gradient(circle, var(--wine), var(--wine-deep));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .vinyl-label span{ font-family:'Abril Fatface'; color:var(--brass-light); font-size:1.6rem; }
+
+  .tonearm{
+    position:absolute; top:-6px; right:-38px; width:100px; height:6px; border-radius:3px;
+    background:linear-gradient(90deg, var(--brass), var(--brass-light));
+    transform-origin:right center; transform:rotate(-30deg);
+    transition:transform 0.9s cubic-bezier(.3,.7,.4,1);
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+  }
+  .tonearm::before{ content:""; position:absolute; right:-4px; top:-8px; width:20px; height:20px; border-radius:50%; background:var(--noir-2); border:2px solid var(--brass); }
+  .tonearm::after{ content:""; position:absolute; left:-4px; top:-3px; width:10px; height:10px; border-radius:50%; background:var(--brass-light); }
+  body.opening .tonearm, body.opened .tonearm{ transform:rotate(-4deg); }
+
+  #lock .hint{ font-size:0.64rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--cream-soft); margin-top:0.4rem; }
+
+  /* ---------- animaciones del hero tras abrir ---------- */
+  .disc-divider.hero-mark, .hero .hero-eyebrow, .hero .age-big, .hero .name-big, .hero .tagline, .hero .date-line, .scroll-cue{ opacity:0; }
+  body.opened .hero-mark{ animation:fade-up 1s 0.15s ease forwards; }
+  body.opened .hero .hero-eyebrow{ animation:fade-up 0.9s 0.35s ease forwards; }
+  body.opened .hero .age-big{ animation:fade-up 1s 0.55s ease forwards; }
+  body.opened .hero .name-big{ animation:fade-up 1s 0.8s ease forwards; }
+  body.opened .hero .tagline{ animation:fade-up 0.9s 1.1s ease forwards; }
+  body.opened .hero .date-line{ animation:fade-up 0.9s 1.3s ease forwards; }
+  body.opened .scroll-cue{ animation:fade-up 0.9s 1.65s ease forwards, bob 2.6s 2.65s ease-in-out infinite; }
+  @keyframes fade-up{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
+
+  /* ---------- disco: firma visual reutilizada como divisor ---------- */
+  .disc-divider{ display:flex; align-items:center; justify-content:center; gap:0.9rem; position:relative; z-index:2; }
+  .disc-divider .line{ width:52px; height:1px; background:linear-gradient(90deg, transparent, var(--brass)); }
+  .disc-divider .line.right{ background:linear-gradient(90deg, var(--brass), transparent); }
+  .disc-divider .dot{ width:14px; height:14px; border-radius:50%; border:1.5px solid var(--brass); position:relative; }
+  .disc-divider .dot::after{ content:""; position:absolute; inset:4px; border-radius:50%; background:var(--brass); }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative; min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:2.2rem 1.5rem; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% 10%, rgba(201,166,107,0.08), transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(107,30,43,0.18), transparent 60%),
+      var(--noir);
+  }
+  .hero .hero-eyebrow{ position:relative; z-index:2; }
+  .hero .age-big{
+    position:relative; z-index:2; font-family:'Abril Fatface', serif; font-size:clamp(6rem, 30vw, 11rem); line-height:0.8;
+    background:linear-gradient(160deg, var(--brass-light), var(--brass) 55%, #9c7c48);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-top:0.6rem;
+  }
+  .hero .name-big{ position:relative; z-index:2; font-family:'Permanent Marker'; font-size:clamp(1.6rem, 6vw, 2.4rem); color:var(--cream); margin-top:0.2rem; }
+  .hero .tagline{ position:relative; z-index:2; font-size:0.95rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--wine); background:var(--brass-light); display:inline-block; padding:0.3rem 0.9rem; border-radius:999px; margin-top:1rem; font-weight:600; }
+  .hero .date-line{ position:relative; z-index:2; font-size:0.85rem; letter-spacing:0.16em; color:var(--cream-soft); margin-top:0.9rem; }
+  .scroll-cue{
+    position:fixed; bottom:clamp(1rem, 4dvh, 2.4rem); left:0; right:0; margin:0 auto; width:max-content;
+    display:flex; flex-direction:column; align-items:center; gap:0.4rem; z-index:6; transition:opacity 0.4s ease; cursor:pointer;
+  }
+  .scroll-cue.hide{ opacity:0 !important; pointer-events:none; }
+  .scroll-cue span{ font-size:0.6rem; letter-spacing:0.28em; color:var(--cream-soft); text-transform:uppercase; }
+
+  /* ============ SECTIONS ============ */
+  section{ position:relative; z-index:2; padding:5rem 1.5rem; max-width:880px; margin:0 auto; text-align:center; }
+  .section-wrap{ position:relative; overflow:hidden; }
+  .section-wrap::before{ content:""; position:absolute; inset:0; z-index:0; opacity:0.65; pointer-events:none; }
+  .tint-a::before{ background:radial-gradient(ellipse at 12% 15%, rgba(201,166,107,0.06), transparent 55%); }
+  .tint-b::before{ background:radial-gradient(ellipse at 88% 85%, rgba(107,30,43,0.14), transparent 55%); }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  .sec-icon{ display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%; border:1px solid var(--brass); color:var(--brass); margin-bottom:1rem; background:rgba(201,166,107,0.06); }
+  .sec-icon svg{ width:20px; height:20px; }
+  section h2{ font-family:'Abril Fatface', serif; font-size:clamp(1.8rem, 4.5vw, 2.4rem); margin:0.6rem 0 1.4rem; color:var(--cream); }
+  section > p{ font-size:1.02rem; line-height:1.9; color:var(--cream-soft); max-width:580px; margin:0 auto; }
+
+  /* ---------- mensaje personal ---------- */
+  .quote{ font-family:'Permanent Marker'; font-size:1.3rem; line-height:1.7; color:var(--brass-light); margin-top:1.6rem; max-width:520px; margin-left:auto; margin-right:auto; }
+
+  /* ---------- playlist de la noche ---------- */
+  .playlist-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:1.2rem; margin-top:2.4rem; }
+  @media (max-width:640px){ .playlist-grid{ grid-template-columns:1fr; } }
+  .track-card{ padding:1.4rem 1.2rem; border:1px solid rgba(201,166,107,0.3); background:rgba(201,166,107,0.03); text-align:left; border-radius:10px; }
+  .track-card .num{ font-family:'Permanent Marker'; font-size:0.75rem; color:var(--brass); }
+  .track-card h3{ font-family:'Abril Fatface'; font-weight:400; font-size:1.15rem; color:var(--cream); margin:0.3rem 0 0.4rem; }
+  .track-card p{ font-size:0.88rem; color:var(--cream-soft); line-height:1.6; }
+
+  /* ---------- itinerario ---------- */
+  .timeline{ position:relative; margin-top:3rem; max-width:500px; margin-left:auto; margin-right:auto; text-align:left; }
+  .timeline::before{ content:""; position:absolute; left:19px; top:6px; bottom:6px; width:1px; background:repeating-linear-gradient(180deg, var(--brass) 0 6px, transparent 6px 12px); }
+  .t-stop{ position:relative; padding:0 0 2.5rem 3.4rem; }
+  .t-stop:last-child{ padding-bottom:0; }
+  .t-dot{ position:absolute; left:10px; top:2px; width:20px; height:20px; border-radius:50%; background:var(--noir); border:1.5px solid var(--brass); display:flex; align-items:center; justify-content:center; }
+  .t-dot svg{ width:11px; height:11px; }
+  .t-time{ font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--brass); font-weight:600; }
+  .t-title{ font-family:'Abril Fatface'; font-size:1.3rem; margin:0.25rem 0 0.3rem; color:var(--cream); }
+  .t-place{ font-size:0.86rem; color:var(--cream-soft); }
+
+  /* ---------- codigo de vestimenta ---------- */
+  .palette{ display:flex; justify-content:center; gap:0.9rem; margin-top:2rem; flex-wrap:wrap; }
+  .swatch{ width:38px; height:38px; border-radius:50%; border:1px solid rgba(242,233,220,0.15); transition:transform 0.3s ease; }
+  .swatch:hover{ transform:scale(1.18) translateY(-3px); }
+
+  /* ---------- galeria ---------- */
+  .gallery-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:0.9rem; margin-top:2.4rem; }
+  @media (max-width:640px){ .gallery-grid{ grid-template-columns:repeat(2, 1fr); } }
+  .gallery-grid figure{ position:relative; overflow:hidden; aspect-ratio:1/1; border:1px solid rgba(201,166,107,0.25); border-radius:8px; }
+  .gallery-grid img{ width:100%; height:100%; object-fit:cover; filter:contrast(1.05) saturate(0.95); transition:transform 0.6s ease, filter 0.6s ease; }
+  .gallery-grid figure:hover img{ transform:scale(1.08); filter:contrast(1.1) saturate(1.1); }
+  .gallery-grid figure::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 60%, rgba(11,8,6,0.6)); pointer-events:none; }
+
+  /* ---------- regalos ---------- */
+  .gift-links{ display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:2.2rem; }
+  .gift-links a{
+    border:1px solid var(--brass); color:var(--brass); text-decoration:none; padding:0.85rem 1.8rem; border-radius:999px;
+    font-family:'Rubik'; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; transition:all 0.3s ease;
+  }
+  .gift-links a:hover{ background:var(--brass); color:var(--noir-deep); }
+
+  /* ---------- rsvp ---------- */
+  .rsvp form{ display:flex; flex-direction:column; gap:1.1rem; max-width:420px; margin:2.2rem auto 0; }
+  .field{ text-align:left; }
+  .field label{ display:block; font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--cream-soft); margin-bottom:0.4rem; }
+  .field input{ width:100%; background:transparent; border:none; border-bottom:1px solid rgba(201,166,107,0.4); color:var(--cream); font-family:'Rubik'; font-size:1rem; padding:0.5rem 0.1rem; outline:none; transition:border-color 0.3s ease; }
+  .field input:focus{ border-bottom-color:var(--brass); }
+  .toggle{ display:flex; gap:0.8rem; }
+  .toggle button{ flex:1; padding:0.7rem; background:transparent; border:1px solid rgba(201,166,107,0.4); color:var(--cream); font-family:'Rubik'; letter-spacing:0.03em; cursor:pointer; transition:all .25s ease; border-radius:8px; }
+  .toggle button.active{ background:var(--brass); color:var(--noir-deep); border-color:var(--brass); }
+  .submit{ margin-top:0.6rem; padding:0.9rem; background:linear-gradient(120deg, var(--wine), var(--wine-deep)); color:var(--brass-light); border:1px solid var(--brass); font-family:'Permanent Marker'; letter-spacing:0.02em; font-size:1rem; cursor:pointer; transition:transform .2s ease; border-radius:10px; }
+  .submit:hover{ transform:translateY(-2px); }
+  .confirm-msg{ display:none; margin-top:1.6rem; color:var(--brass); font-family:'Permanent Marker'; font-size:1.2rem; }
+  .rsvp-count{ font-size:0.75rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--cream-soft); margin-top:0.6rem; }
+  .rsvp-count strong{ color:var(--brass); }
+
+  footer{ text-align:center; padding:3rem 1.5rem 4rem; color:var(--cream-soft); font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; position:relative; z-index:2; }
+
+  /* ---------- lightbox ---------- */
+  .lightbox{ position:fixed; inset:0; z-index:80; background:rgba(11,8,6,0.95); display:none; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s ease; }
+  .lightbox.open{ display:flex; opacity:1; }
+  .lightbox-img{ max-width:min(88vw, 560px); max-height:78vh; object-fit:contain; border:1px solid rgba(201,166,107,0.4); box-shadow:0 20px 60px rgba(0,0,0,0.6); user-select:none; -webkit-user-drag:none; }
+  .lightbox-close{ position:absolute; top:1.2rem; right:1.2rem; width:42px; height:42px; border-radius:50%; background:rgba(201,166,107,0.12); border:1px solid var(--brass); color:var(--brass); font-size:1.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .lightbox-nav{ position:absolute; top:50%; transform:translateY(-50%); width:46px; height:46px; border-radius:50%; background:rgba(201,166,107,0.12); border:1px solid var(--brass); color:var(--brass); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .lightbox-nav.prev{ left:1rem; } .lightbox-nav.next{ right:1rem; }
+  .lightbox-dots{ position:absolute; bottom:1.4rem; left:50%; transform:translateX(-50%); display:flex; gap:0.5rem; }
+  .lightbox-dots span{ width:7px; height:7px; border-radius:50%; background:rgba(201,166,107,0.35); }
+  .lightbox-dots span.active{ background:var(--brass); }
+  @media (max-width:640px){ .lightbox-nav{ width:38px; height:38px; } .lightbox-nav.prev{ left:0.4rem; } .lightbox-nav.next{ right:0.4rem; } }
+
+  /* ---------- music toggle ---------- */
+  #music-btn{
+    position:fixed; bottom:22px; right:22px; z-index:40; width:52px; height:52px; border-radius:50%;
+    background:linear-gradient(135deg, var(--brass), var(--brass-light)); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.4);
+    transition:transform 0.25s ease, opacity 0.5s ease; opacity:0; pointer-events:none;
+  }
+  body.opened #music-btn{ opacity:1; pointer-events:auto; }
+  #music-btn:hover{ transform:scale(1.08); }
+  #music-btn svg{ width:22px; height:22px; color:var(--noir-deep); }
+  #music-btn.playing svg .bar{ animation:eq 0.9s ease-in-out infinite; }
+  #music-btn.playing svg .bar:nth-child(2){ animation-delay:0.15s; }
+  #music-btn.playing svg .bar:nth-child(3){ animation-delay:0.3s; }
+  @keyframes eq{ 0%,100%{ transform:scaleY(0.4);} 50%{ transform:scaleY(1);} }
+</style>
+</head>
+<body>
+
+<div class="watermark" aria-hidden="true">
+  <svg viewBox="0 0 200 200" fill="none" stroke="var(--brass)" stroke-width="1">
+    <circle cx="100" cy="100" r="80"/>
+    <circle cx="100" cy="100" r="60"/>
+    <circle cx="100" cy="100" r="40"/>
+    <circle cx="100" cy="100" r="14"/>
+  </svg>
+</div>
+
+<div id="notes"></div>
+
+<div id="lock">
+  <div class="lock-center">
+    <div class="lock-text">
+      <p class="lock-eyebrow eyebrow">Los invita a celebrar</p>
+    </div>
+    <div class="turntable-wrap" onclick="openInvite()">
+      <div class="vinyl"><div class="vinyl-label"><span>50</span></div></div>
+      <div class="tonearm"></div>
+    </div>
+    <p class="hint">Toca el disco para dejar caer la aguja</p>
+  </div>
+</div>
+
+<div id="spotify-embed" style="position:fixed; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none; left:-9999px;"></div>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
+<button id="music-btn" onclick="toggleMusic()" aria-label="Reproducir música">
+  <svg viewBox="0 0 24 24"><rect class="bar" x="4" y="9" width="3" height="6" rx="1.5" fill="currentColor"/><rect class="bar" x="10.5" y="5" width="3" height="14" rx="1.5" fill="currentColor"/><rect class="bar" x="17" y="9" width="3" height="6" rx="1.5" fill="currentColor"/></svg>
+</button>
+
+<section class="hero">
+  <div class="disc-divider hero-mark"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+  <p class="hero-eyebrow eyebrow">Los invita a celebrar</p>
+  <p class="age-big display">50</p>
+  <p class="name-big">¡Feliz cumpleaños, Roberto!</p>
+  <p class="tagline">Medio siglo, toda una fiesta</p>
+  <p class="date-line">14 de noviembre, 2026 — 8:00 PM — Terraza Alameda</p>
+
+  <div class="scroll-cue" onclick="smoothScrollCue()">
+    <span>Desliza</span>
+    <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 0V19M7 19L1 13M7 19L13 13" stroke="#C9A66B" stroke-width="1.3"/></svg>
+  </div>
+</section>
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<div class="section-wrap tint-a">
+  <section class="countdown-section">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div>
+    <p class="eyebrow reveal">Cuenta regresiva</p>
+    <h2 class="reveal">Falta poco</h2>
+    <div class="countdown reveal" style="display:flex; justify-content:center; gap:1.1rem; flex-wrap:wrap; margin-top:2.4rem;">
+      <div style="width:84px; border-radius:10px; padding:1rem 0.4rem; background:rgba(201,166,107,0.04); border:1px solid rgba(201,166,107,0.3);"><span style="font-family:'Abril Fatface'; font-size:2rem; color:var(--brass); display:block; line-height:1;" id="cd-days">--</span><span style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--cream-soft);">Días</span></div>
+      <div style="width:84px; border-radius:10px; padding:1rem 0.4rem; background:rgba(201,166,107,0.04); border:1px solid rgba(201,166,107,0.3);"><span style="font-family:'Abril Fatface'; font-size:2rem; color:var(--brass); display:block; line-height:1;" id="cd-hours">--</span><span style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--cream-soft);">Horas</span></div>
+      <div style="width:84px; border-radius:10px; padding:1rem 0.4rem; background:rgba(201,166,107,0.04); border:1px solid rgba(201,166,107,0.3);"><span style="font-family:'Abril Fatface'; font-size:2rem; color:var(--brass); display:block; line-height:1;" id="cd-min">--</span><span style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--cream-soft);">Min</span></div>
+      <div style="width:84px; border-radius:10px; padding:1rem 0.4rem; background:rgba(201,166,107,0.04); border:1px solid rgba(201,166,107,0.3);"><span style="font-family:'Abril Fatface'; font-size:2rem; color:var(--brass); display:block; line-height:1;" id="cd-sec">--</span><span style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--cream-soft);">Seg</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="message">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8 14c1.5 1.5 6.5 1.5 8 0M9 9h.01M15 9h.01"/></svg></div>
+    <p class="eyebrow reveal">Unas palabras</p>
+    <h2 class="reveal">Antes de la fiesta</h2>
+    <p class="quote reveal">"50 años, incontables historias y todavía muchas más por vivir. Quiero celebrarlo rodeado de la gente que las hizo posibles: ustedes."</p>
+  </section>
+</div>
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<!-- PLAYLIST: personaliza los generos/decadas segun el gusto real del cumpleañero -->
+<div class="section-wrap tint-a">
+  <section class="playlist">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
+    <p class="eyebrow reveal">El soundtrack de la noche</p>
+    <h2 class="reveal">La playlist</h2>
+    <div class="playlist-grid">
+      <div class="track-card reveal"><p class="num">Lado A</p><h3>Disco &amp; Funk de los 70s</h3><p>Para abrir la pista con groove y buena vibra.</p></div>
+      <div class="track-card reveal"><p class="num">Lado B</p><h3>Rock en español 80s-90s</h3><p>Los clásicos que nunca fallan en una buena fiesta.</p></div>
+      <div class="track-card reveal"><p class="num">Lado C</p><h3>Baladas &amp; boleros</h3><p>Para el brindis y los abrazos de medianoche.</p></div>
+      <div class="track-card reveal"><p class="num">Lado D</p><h3>Éxitos de hoy</h3><p>Lo que está sonando ahora, para cerrar con todo.</p></div>
+    </div>
+  </section>
+</div>
+<!-- FIN PLAYLIST -->
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="itinerary">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+    <p class="eyebrow reveal">La noche paso a paso</p>
+    <h2 class="reveal">Itinerario</h2>
+    <div class="timeline">
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2"><path d="M6 3h12l1 6-3 2v10H8V11L5 9l1-6z"/></svg></div><span class="t-time">8:00 PM</span><h3 class="t-title">Bienvenida &amp; cóctel</h3><p class="t-place">Terraza Alameda</p></div>
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2"><path d="M4 22h16M6 22V10l6-6 6 6v12"/></svg></div><span class="t-time">9:00 PM</span><h3 class="t-title">Cena</h3><p class="t-place">Salón principal</p></div>
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2"><path d="M8 21h8M12 17v4M6 3h12l-1 9a5 5 0 01-10 0L6 3z"/></svg></div><span class="t-time">10:00 PM</span><h3 class="t-title">Brindis &amp; palabras</h3><p class="t-place">Salón principal</p></div>
+      <div class="t-stop reveal"><div class="t-dot"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2"><path d="M9 18V5l12-2v13M9 9l12-2M6 21a3 3 0 100-6 3 3 0 000 6zM18 19a3 3 0 100-6 3 3 0 000 6z"/></svg></div><span class="t-time">10:30 PM</span><h3 class="t-title">DJ &amp; pista abierta</h3><p class="t-place">Terraza</p></div>
+    </div>
+  </section>
+</div>
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<div class="section-wrap tint-a">
+  <section class="code">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12l1 6-3 2v10H8V11L5 9l1-6z"/></svg></div>
+    <p class="eyebrow reveal">Código de vestimenta</p>
+    <h2 class="reveal">Cocktail elegante</h2>
+    <p class="reveal">Ven arreglado, pero sin miedo a bailar. Tonos vino, negro y dorado son bienvenidos.</p>
+    <div class="palette reveal">
+      <div class="swatch" style="background:#6B1E2B;"></div>
+      <div class="swatch" style="background:#14100D;"></div>
+      <div class="swatch" style="background:#C9A66B;"></div>
+      <div class="swatch" style="background:#F2E9DC;"></div>
+    </div>
+  </section>
+</div>
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="gallery">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg></div>
+    <p class="eyebrow reveal">Momentos</p>
+    <h2 class="reveal">Galería</h2>
+    <div class="gallery-grid">
+      <!-- FOTO 1/6 — reemplaza el src="..." por el link o archivo de la foto real -->
+      <figure class="reveal" onclick="openLightbox(0)"><img src="https://images.unsplash.com/photo-1602848597941-0d3d3a2c1241?w=500&q=60" alt="Foto 1"></figure>
+      <!-- FOTO 2/6 -->
+      <figure class="reveal" onclick="openLightbox(1)"><img src="https://images.unsplash.com/photo-1526394931762-90052e97b376?w=500&q=60" alt="Foto 2"></figure>
+      <!-- FOTO 3/6 -->
+      <figure class="reveal" onclick="openLightbox(2)"><img src="https://images.unsplash.com/photo-1619983081563-430f63602796?w=500&q=60" alt="Foto 3"></figure>
+      <!-- FOTO 4/6 -->
+      <figure class="reveal" onclick="openLightbox(3)"><img src="https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?w=500&q=60" alt="Foto 4"></figure>
+      <!-- FOTO 5/6 -->
+      <figure class="reveal" onclick="openLightbox(4)"><img src="https://images.unsplash.com/photo-1580656449278-e8381933522c?w=500&q=60" alt="Foto 5"></figure>
+      <!-- FOTO 6/6 -->
+      <figure class="reveal" onclick="openLightbox(5)"><img src="https://images.unsplash.com/photo-1619983081563-430f63602796?w=500&q=60" alt="Foto 6"></figure>
+    </div>
+  </section>
+</div>
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<div class="section-wrap tint-a">
+  <section class="gifts">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 8h18M12 8v13M12 8c-2-4-8-3-6 0h6zM12 8c2-4 8-3 6 0h-6z"/></svg></div>
+    <p class="eyebrow reveal">Sin compromiso</p>
+    <h2 class="reveal">Regalos</h2>
+    <p class="reveal">Tu compañía es el mejor regalo. Si de verdad quieres traer algo, aquí unas ideas.</p>
+    <div class="gift-links reveal">
+      <a href="#" target="_blank" rel="noopener">Vinilos favoritos</a>
+      <a href="#" target="_blank" rel="noopener">Sobre / Efectivo</a>
+    </div>
+  </section>
+</div>
+
+<div class="disc-divider"><div class="line"></div><div class="dot"></div><div class="line right"></div></div>
+
+<div class="section-wrap tint-b">
+  <section class="rsvp">
+    <div class="sec-icon reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v14H8l-4 4V4z"/><path d="M8 9h8M8 13h5"/></svg></div>
+    <p class="eyebrow reveal">Confirma tu asistencia</p>
+    <h2 class="reveal">Te esperamos</h2>
+    <form class="reveal" id="rsvp-form">
+      <div class="field">
+        <label for="name">Nombre completo</label>
+        <input type="text" id="name" required placeholder="Tu nombre">
+      </div>
+      <div class="field">
+        <label>¿Nos acompañas?</label>
+        <div class="toggle">
+          <button type="button" class="opt active" data-val="si">Sí, ahí estaré</button>
+          <button type="button" class="opt" data-val="no">No podré ir</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="guests">Número de acompañantes</label>
+        <input type="number" id="guests" min="0" value="0">
+      </div>
+      <button type="submit" class="submit" id="submit-btn">Confirmar</button>
+    </form>
+    <p class="confirm-msg" id="confirm-msg">Gracias — ¡nos vemos en la pista!</p>
+    <p class="rsvp-count" id="rsvp-count">Cargando confirmaciones…</p>
+  </section>
+</div>
+
+<!-- ---------- GALERÍA: modal carrusel ---------- -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this) closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Cerrar">&times;</button>
+  <button class="lightbox-nav prev" onclick="lbNav(-1)" aria-label="Anterior">&#10094;</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  <button class="lightbox-nav next" onclick="lbNav(1)" aria-label="Siguiente">&#10095;</button>
+  <div class="lightbox-dots" id="lightbox-dots"></div>
+</div>
+
+<footer>Roberto · 50 Años · 14 · Noviembre · 2026</footer>
+
+<script>
+  // notas musicales ambientales
+  const notesEl = document.getElementById('notes');
+  const noteChars = ['♪','♫','♬'];
+  for(let i=0;i<16;i++){
+    const n = document.createElement('div');
+    n.className = 'note';
+    n.textContent = noteChars[i % noteChars.length];
+    n.style.left = Math.random()*100+'%';
+    n.style.fontSize = (0.8+Math.random()*0.8)+'rem';
+    n.style.animationDuration = (12+Math.random()*11)+'s';
+    n.style.animationDelay = (Math.random()*16)+'s';
+    notesEl.appendChild(n);
+  }
+
+  function smoothScrollCue() {
+    const targetEl = document.querySelector('.section-wrap');
+    if (!targetEl) return;
+    const target = targetEl.getBoundingClientRect().top + window.scrollY;
+    const start = window.scrollY;
+    const dist = target - start;
+    const duration = 2000;
+    let startTime = null;
+    const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const step = (ts) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      window.scrollTo({ top: start + dist * ease(progress), behavior: 'auto' });
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // ---------- lightbox / carrusel de galería ----------
+  const galleryPhotos = [
+    'https://images.unsplash.com/photo-1602848597941-0d3d3a2c1241?w=1000&q=70',
+    'https://images.unsplash.com/photo-1526394931762-90052e97b376?w=1000&q=70',
+    'https://images.unsplash.com/photo-1619983081563-430f63602796?w=1000&q=70',
+    'https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?w=1000&q=70',
+    'https://images.unsplash.com/photo-1580656449278-e8381933522c?w=1000&q=70',
+    'https://images.unsplash.com/photo-1619983081563-430f63602796?w=1000&q=70',
+  ];
+  let lbIndex = 0;
+  let lbAutoplay = null;
+  const lbEl = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbDots = document.getElementById('lightbox-dots');
+  galleryPhotos.forEach(()=>{ lbDots.appendChild(document.createElement('span')); });
+  function lbRender(){
+    lbImg.src = galleryPhotos[lbIndex];
+    [...lbDots.children].forEach((d,i)=> d.classList.toggle('active', i===lbIndex));
+  }
+  function lbStartAutoplay(){ clearInterval(lbAutoplay); lbAutoplay = setInterval(()=> lbNav(1), 3200); }
+  function openLightbox(i){ lbIndex = i; lbRender(); lbEl.classList.add('open'); lbStartAutoplay(); }
+  function closeLightbox(){ lbEl.classList.remove('open'); clearInterval(lbAutoplay); }
+  function lbNav(dir){ lbIndex = (lbIndex + dir + galleryPhotos.length) % galleryPhotos.length; lbRender(); lbStartAutoplay(); }
+  let lbTouchX = null;
+  lbImg.addEventListener('touchstart', (e)=>{ lbTouchX = e.touches[0].clientX; });
+  lbImg.addEventListener('touchend', (e)=>{
+    if(lbTouchX===null) return;
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+    if(Math.abs(dx) > 40){ lbNav(dx < 0 ? 1 : -1); }
+    lbTouchX = null;
+  });
+
+  window.addEventListener('scroll', ()=>{
+    const cue = document.querySelector('.scroll-cue');
+    if(!cue) return;
+    if(window.scrollY > 60){ cue.classList.add('hide'); } else { cue.classList.remove('hide'); }
+  });
+
+  // scroll reveal con stagger
+  const revealEls = document.querySelectorAll('.reveal');
+  revealEls.forEach((el, i)=>{ el.style.transitionDelay = ((i % 6) * 0.08) + 's'; });
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });
+  }, {threshold:0.18});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+  // cuenta regresiva al 14 de noviembre 2026, 8:00 PM
+  const target = new Date('2026-11-14T20:00:00');
+  function tick(){
+    const now = new Date();
+    let diff = Math.max(0, target - now);
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor(diff%86400000/3600000);
+    const m = Math.floor(diff%3600000/60000);
+    const s = Math.floor(diff%60000/1000);
+    document.getElementById('cd-days').textContent = d;
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  // apertura: la aguja cae sobre el vinilo
+  function openInvite(){
+    if(document.body.classList.contains('opening') || document.body.classList.contains('opened')) return;
+    document.body.classList.add('opening');
+    setTimeout(()=>{ document.body.classList.add('opened'); }, 1250);
+    playSpotify();
+  }
+
+  // ---------- música (Spotify — reproduce el preview y lo repite en loop) ----------
+  const SPOTIFY_TRACK_URI = ''; // cuando tengan la canción real, avísame y la cambio
+  let spotifyController = null;
+  let wantsPlayOnReady = false;
+  let userPaused = false;
+
+  window.onSpotifyIframeApiReady = (IFrameAPI) => {
+    const element = document.getElementById('spotify-embed');
+    const options = { uri: SPOTIFY_TRACK_URI, width: '1', height: '1' };
+    IFrameAPI.createController(element, options, (EmbedController) => {
+      spotifyController = EmbedController;
+      spotifyController.addListener('playback_update', (e) => {
+        const btn = document.getElementById('music-btn');
+        if(!e || !e.data) return;
+        const { isPaused, position, duration } = e.data;
+        if(!isPaused){ btn.classList.add('playing'); }
+        else {
+          btn.classList.remove('playing');
+          if(!userPaused && duration && position >= duration - 1000){
+            spotifyController.seek(0);
+            spotifyController.play();
+          }
+        }
+      });
+      if(wantsPlayOnReady){ spotifyController.play(); wantsPlayOnReady = false; }
+    });
+  };
+  function playSpotify(){
+    userPaused = false;
+    if(spotifyController){ spotifyController.play(); } else { wantsPlayOnReady = true; }
+  }
+  function toggleMusic(){
+    if(!spotifyController){ wantsPlayOnReady = true; return; }
+    const btn = document.getElementById('music-btn');
+    userPaused = btn.classList.contains('playing');
+    spotifyController.togglePlay();
+  }
+
+  // RSVP toggle
+  let asistencia = 'si';
+  document.querySelectorAll('.toggle .opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.toggle .opt').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      asistencia = btn.dataset.val;
+    });
+  });
+
+  async function refreshCount(){
+    const el = document.getElementById('rsvp-count');
+    try{
+      const list = await window.storage.list('rsvp:', true);
+      const keys = (list && list.keys) ? list.keys : [];
+      let confirmed = 0;
+      for(const k of keys){
+        try{
+          const r = await window.storage.get(k, true);
+          if(r && r.value){
+            const data = JSON.parse(r.value);
+            if(data.asistencia === 'si') confirmed++;
+          }
+        }catch(_e){}
+      }
+      el.innerHTML = keys.length
+        ? `<strong>${confirmed}</strong> personas han confirmado su asistencia`
+        : 'Sé el primero en confirmar';
+    }catch(err){
+      el.textContent = '';
+      console.error('No se pudo leer el conteo de RSVP', err);
+    }
+  }
+
+  document.getElementById('rsvp-form').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    const name = document.getElementById('name').value.trim();
+    const guests = document.getElementById('guests').value;
+    if(!name) return;
+    btn.textContent = 'Enviando…';
+    btn.disabled = true;
+
+    try{
+      const key = 'rsvp:' + Date.now() + '-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      await window.storage.set(key, JSON.stringify({ name, asistencia, guests, ts: Date.now() }), true);
+      refreshCount();
+    }catch(err){ /* si no está disponible fuera de Claude, no pasa nada */ }
+
+    const ANFITRION_WHATSAPP = '521XXXXXXXXXX'; // reemplaza por el número real: código de país + número, sin + ni espacios
+    const msg = asistencia === 'si'
+      ? `¡Hola! Soy ${name}. Confirmo que SÍ asistiré a los 50 años de Roberto. Acompañantes: ${guests}.`
+      : `Hola, soy ${name}. Lamento informarles que no podré asistir a los 50 años de Roberto.`;
+    window.open(`https://wa.me/${ANFITRION_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    document.getElementById('rsvp-form').style.display='none';
+    document.getElementById('confirm-msg').style.display='block';
+  });
+
+  refreshCount();
+</script>
+
+</body>
+</html>

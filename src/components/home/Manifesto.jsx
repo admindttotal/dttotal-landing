@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
+import { ChevronRight } from "lucide-react";
 
 // Importa aquí tus imágenes reales
 import supportImg1 from "../../assets/images/nosotros/supportImg1.jpg";
@@ -218,8 +219,8 @@ function Manifesto() {
                     
                     {/* Información dentro de la tarjeta superior con contador dinámico */}
                     {isTop && (
-                      <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between text-white">
-                        <div>
+                      <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3 text-white">
+                        <div className="min-w-0">
                           <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#e3cd5c]">
                             {card.title}
                           </p>
@@ -227,8 +228,10 @@ function Manifesto() {
                             {card.caption}
                           </p>
                         </div>
-                        <span className="text-[10px] sm:text-xs bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full uppercase tracking-widest border border-white/20">
-                          Toca para cambiar ({realIndex}/{realPhotos.length})
+                        <span className="shrink-0 flex items-center gap-1 text-[10px] sm:text-xs bg-white/20 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-full uppercase tracking-widest border border-white/20">
+                          <span className="hidden sm:inline">Toca para cambiar </span>
+                          <span>({realIndex}/{realPhotos.length})</span>
+                          <ChevronRight size={12} className="sm:hidden" />
                         </span>
                       </div>
                     )}
